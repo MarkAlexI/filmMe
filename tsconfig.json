@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2015",
+    "removeComments": true,
+    "outDir": "./dist",
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "lib": ["dom"],
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/components*"]
+    }
+  },
+  "strict": true,
+  "files": [
+    "./src/main.ts"
+  ],
+  "include": [
+    "src/**/*.vue",
+    "**/*.d.ts"
+  ]
+}
