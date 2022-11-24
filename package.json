@@ -28,7 +28,9 @@
   "private": true,
   "dependencies": {
     "@types/node": "^18.11.9",
-    "vue": "^3.2.45"
+    "vue": "^3.2.45",
+    "feather-icons": "4.29.0",
+    "vue-feather": "2.0.0"
   },
   "devDependencies": {
     "@vue/compiler-sfc": "^3.2.45",

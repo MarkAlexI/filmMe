@@ -1,12 +1,17 @@
 <template>
   <div class="container">
-    <VueTest></VueTest>
+    <vue-feather type="feather"></vue-feather>
   </div>
 </template>
 
-<script setup>
-  import VueTest from './test.vue';
-  
+<script>
+  import { defineComponent } from 'vue';
+
+  export default defineComponent({
+    setup() {
+      return {};
+    }
+  });
   
 </script>
 
