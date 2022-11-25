@@ -1,17 +1,13 @@
 <template>
   <div class="container">
-    <vue-feather type="feather"></vue-feather>
+    <MyHeader></MyHeader>
+    <MediaStream></MediaStream>
   </div>
 </template>
 
-<script>
-  import { defineComponent } from 'vue';
-
-  export default defineComponent({
-    setup() {
-      return {};
-    }
-  });
+<script setup lang="ts">
+  import MyHeader from '@/MyHeader';
+  import MediaStream from '@/MediaStream';
   
 </script>
 
