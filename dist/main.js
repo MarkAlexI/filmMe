@@ -20032,6 +20032,24 @@ exports["default"] = (0, vue_1.defineComponent)({
         expose();
         const selectVal = (0, vue_2.ref)(null);
         const cameras = (0, vue_2.ref)([{}]);
+        let streamStarted = false;
+        let myStreamSrc = (0, vue_2.ref)(null);
+        let cameraId = '';
+        let myVideoEl = (0, vue_2.ref)();
+        const constraints = {
+            video: {
+                width: {
+                    min: 1280,
+                    ideal: 1920,
+                    max: 2560,
+                },
+                height: {
+                    min: 720,
+                    ideal: 1080,
+                    max: 1440
+                },
+            }
+        };
         const getCameraSelection = () => __awaiter(this, void 0, void 0, function* () {
             const devices = yield navigator.mediaDevices.enumerateDevices();
             const videoDevices = devices.filter(device => device.kind === 'videoinput');
@@ -20041,7 +20059,29 @@ exports["default"] = (0, vue_1.defineComponent)({
             cameras.value = options;
         });
         getCameraSelection();
-        const __returned__ = { selectVal, cameras, getCameraSelection };
+        const playVideo = () => {
+            if (streamStarted) {
+                return;
+            }
+            if ('mediaDevices' in navigator && navigator.mediaDevices.getUserMedia) {
+                const updatedConstraints = Object.assign(Object.assign({}, constraints), { deviceId: {
+                        exact: cameraId
+                    } });
+                startStream(updatedConstraints);
+            }
+        };
+        const startStream = (constraints) => __awaiter(this, void 0, void 0, function* () {
+            const stream = yield navigator.mediaDevices.getUserMedia(constraints);
+            handleStream(stream);
+        });
+        const handleStream = (stream) => {
+            myStreamSrc = stream;
+            streamStarted = true;
+        };
+        const changeCamera = (event) => {
+            cameraId = event.target.value;
+        };
+        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, get myStreamSrc() { return myStreamSrc; }, set myStreamSrc(v) { myStreamSrc = v; }, get cameraId() { return cameraId; }, set cameraId(v) { cameraId = v; }, get myVideoEl() { return myVideoEl; }, set myVideoEl(v) { myVideoEl = v; }, constraints, getCameraSelection, playVideo, startStream, handleStream, changeCamera };
         Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true });
         return __returned__;
     }
@@ -20085,35 +20125,40 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.render = void 0;
 const vue_1 = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 const _hoisted_1 = { class: "display-cover" };
-const _hoisted_2 = (0, vue_1.createElementVNode)("video", { autoplay: "" }, null, -1);
+const _hoisted_2 = ["srcObject"];
 const _hoisted_3 = (0, vue_1.createElementVNode)("canvas", { class: "d-none" }, null, -1);
 const _hoisted_4 = { class: "video-options" };
 const _hoisted_5 = (0, vue_1.createElementVNode)("label", { for: "selectcamera" }, "Select camera", -1);
 const _hoisted_6 = ["value"];
 const _hoisted_7 = { class: "controls" };
 const _hoisted_8 = {
-    class: "btn play",
-    title: "Play"
-};
-const _hoisted_9 = {
+    key: 0,
     class: "btn d-none",
     title: "Pause"
 };
-const _hoisted_10 = {
+const _hoisted_9 = {
     class: "btn d-none",
     title: "ScreenShot"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_vue_feather = (0, vue_1.resolveComponent)("vue-feather");
     return ((0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("div", _hoisted_1, [
-        _hoisted_2,
+        ($setup.myStreamSrc)
+            ? ((0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("video", {
+                key: 0,
+                id: "myVideoEl",
+                srcObject: $setup.myStreamSrc,
+                autoplay: "autoplay"
+            }, null, 8, _hoisted_2))
+            : (0, vue_1.createCommentVNode)("v-if", true),
         _hoisted_3,
         (0, vue_1.createElementVNode)("div", _hoisted_4, [
             _hoisted_5,
             (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("select", {
                 name: "selectcamera",
                 "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => (($setup.selectVal) = $event)),
-                class: "custom-select"
+                class: "custom-select",
+                onChange: $setup.changeCamera
             }, [
                 ((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)($setup.cameras, (camera, index) => {
                     return ((0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("option", {
@@ -20121,22 +20166,28 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         key: index
                     }, (0, vue_1.toDisplayString)(camera.label), 9, _hoisted_6));
                 }), 128))
-            ], 512), [
+            ], 544), [
                 [vue_1.vModelSelect, $setup.selectVal]
             ])
         ]),
         (0, vue_1.createElementVNode)("div", _hoisted_7, [
-            (0, vue_1.createElementVNode)("button", _hoisted_8, [
+            (0, vue_1.createElementVNode)("button", {
+                class: "btn play",
+                title: "Play",
+                onClick: $setup.playVideo
+            }, [
                 (0, vue_1.createVNode)(_component_vue_feather, { type: "play-circle" })
             ]),
+            ($setup.streamStarted)
+                ? ((0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("button", _hoisted_8, [
+                    (0, vue_1.createVNode)(_component_vue_feather, {
+                        type: "pause",
+                        stroke: "red",
+                        fill: "blue"
+                    })
+                ]))
+                : (0, vue_1.createCommentVNode)("v-if", true),
             (0, vue_1.createElementVNode)("button", _hoisted_9, [
-                (0, vue_1.createVNode)(_component_vue_feather, {
-                    type: "pause",
-                    stroke: "red",
-                    fill: "blue"
-                })
-            ]),
-            (0, vue_1.createElementVNode)("button", _hoisted_10, [
                 (0, vue_1.createVNode)(_component_vue_feather, { type: "image" })
             ])
         ])
