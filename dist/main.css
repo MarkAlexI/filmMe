@@ -10,12 +10,90 @@ h1 {
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/components/MediaStream.vue?vue&type=style&index=0&id=3e7a8c84&lang=scss ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************/
 h1 {
-  font-size: 28px;
+  font-size: 1.8rem;
   color: rebeccapurple;
-  margin-bottom: 30px;
+  margin-bottom: 1.9rem;
 }
 .d-none {
   display: none;
+}
+.display-cover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 87%;
+  margin: 5% auto;
+  position: relative;
+}
+video {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+}
+.video-options {
+  position: absolute;
+  left: 1rem;
+  top: 2rem;
+}
+.controls {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  display: flex;
+}
+.controls > button {
+  width: 45px;
+  height: 45px;
+  text-align: center;
+  border-radius: 100%;
+  margin: 0 6px;
+  background: transparent;
+}
+.controlss > button:hover svg {
+  color: white !important;
+}
+@media (min-width: 300px) and (max-width: 400px) {
+.controls {
+    flex-direction: column;
+}
+.controls button {
+    margin: 5px 0 !important;
+}
+}
+.controls > button > svg {
+  height: 20px;
+  width: 18px;
+  text-align: center;
+  margin: 0 auto;
+  padding: 0;
+}
+.controls button:nth-child(1) {
+  border: 2px solid #D2002E;
+}
+.controls button:nth-child(1) svg {
+  color: #D2002E;
+}
+.controls button:nth-child(2) {
+  border: 2px solid #008496;
+}
+.controls button:nth-child(2) svg {
+  color: #008496;
+}
+.controls button:nth-child(3) {
+  border: 2px solid #00B541;
+}
+.controls button:nth-child(3) svg {
+  color: #00B541;
+}
+.controls > button {
+  width: 45px;
+  height: 45px;
+  text-align: center;
+  border-radius: 100%;
+  margin: 0 6px;
+  background: transparent;
+}
+.controls > button:hover svg {
+  color: white;
 }
 /*!*************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/App.vue?vue&type=style&index=0&id=7ba5bd90&lang=scss ***!

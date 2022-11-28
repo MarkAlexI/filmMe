@@ -1,9 +1,10 @@
 <template>
   <div class="display-cover">
-    <video v-if="myStreamSrc" id="myVideoEl" :srcObject ="myStreamSrc" autoplay="autoplay"></video>
+    <video class="d-none" ref="myVideoEl" :srcObject="myStreamSrc" autoplay="autoplay"></video>
     <canvas class="d-none"></canvas>
     <div class="video-options">
       <label for="selectcamera">Select camera</label>
+      <br>
       <select name="selectcamera" v-model="selectVal" class="custom-select" @change="changeCamera">
         <option v-for="(camera, index) in cameras" :value="camera.id" :key="index">
           {{ camera.label }}
@@ -12,31 +13,58 @@
     </div>
 
     <div class="controls">
-      <button class="btn play" title="Play" @click="playVideo">
-        <vue-feather type="play-circle"></vue-feather>
+      <button class="btn play" title="Play" @click="playVideo" ref="playBtn">
+        <vue-feather type="play-circle" />
       </button>
-      <button class="btn d-none" title="Pause" v-if="streamStarted">
-        <vue-feather type="pause" stroke="red" fill="blue"></vue-feather>
+      <button class="btn d-none" title="Pause" ref="pauseBtn">
+        <vue-feather type="pause" />
       </button>
-      <button class="btn d-none" title="ScreenShot">
-        <vue-feather type="image"></vue-feather>
+      <button class="btn d-none" title="ScreenShot" ref="shotBtn">
+        <vue-feather type="image" />
       </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-/// <reference types="webrtc" />
-  import { ref, watch } from 'vue';
+  /// <reference types="webrtc" />
+  import { ref, nextTick } from 'vue';
 
   const selectVal: null = ref(null);
   const cameras = ref([{}]);
   let streamStarted = false;
-  let myStreamSrc = ref(null);
-  let cameraId = '';
-  let myVideoEl = ref();
+  const myStreamSrc = ref(null);
+  const cameraId = ref('');
   
-  const constraints = {
+  const myVideoEl = ref(null);
+  const playBtn = ref(null);
+  const pauseBtn = ref(null);
+  const shotBtn = ref(null);
+
+  interface devices {
+    id: string,
+      label: string
+  };
+
+  interface mediaConstraints {
+    video: {
+      width: {
+        min: number,
+        ideal: number,
+        max: number,
+      },
+      height: {
+        min: number,
+        ideal: number,
+        max: number
+      },
+      deviceId ? : {
+        exact ? : string
+      }
+    }
+  };
+
+  const constraints: mediaConstraints = {
     video: {
       width: {
         min: 1280,
@@ -51,57 +79,165 @@
     }
   };
 
-  const getCameraSelection = async () => {
+  const getCameraSelection = async (): Promise<void> => {
     const devices = await navigator.mediaDevices.enumerateDevices();
     const videoDevices = devices.filter(device => device.kind === 'videoinput');
-    const options = videoDevices.map((videoDevice, i) => {
-      return { id: videoDevice.deviceId, label: videoDevice.label || String(i + 1)};
+    const options = await videoDevices.map((videoDevice, i) => {
+      return { id: videoDevice.deviceId, label: videoDevice.label || String(i + 1) };
     });
 
     cameras.value = options;
   };
 
   getCameraSelection();
-  
-  const playVideo = () => {
+
+  const playVideo = (): void => {
     if (streamStarted) {
-    
+
       return;
     }
     if ('mediaDevices' in navigator && navigator.mediaDevices.getUserMedia) {
       const updatedConstraints = {
         ...constraints,
         deviceId: {
-          exact: cameraId
+          exact: cameraId.value
         }
       };
       startStream(updatedConstraints);
     }
   };
-  
-  const startStream = async (constraints) => {
+
+  const startStream = async (constraints: mediaConstraints): Promise<void> => {
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
     handleStream(stream);
   };
-  
-  const handleStream = (stream) => {
-    myStreamSrc = stream;
+
+  const handleStream = (stream: MediaStream): void => {
+    myStreamSrc.value = stream;
+    render();
     streamStarted = true;
   };
-  
-  const changeCamera = (event) => {
-    cameraId = event.target.value;
+
+  const changeCamera = (event: Event): void => {
+    const option = event.target as HTMLOptionElement;
+    cameraId.value = option.value;
+  };
+
+  const render = async (): Promise<void> => {
+    await nextTick();
+    
+    myVideoEl.value.srcObject = myStreamSrc.value;
+    myVideoEl.value.classList.remove('d-none');
+    streamStarted = true;
+    playBtn.value.classList.add('d-none');
+    pauseBtn.value.classList.remove('d-none');
+    shotBtn.value.classList.remove('d-none');
   };
 </script>
 
 <style lang="scss">
   h1 {
-    font-size: 28px;
+    font-size: 1.8rem;
     color: rebeccapurple;
-    margin-bottom: 30px;
+    margin-bottom: 1.9rem;
   }
 
   .d-none {
     display: none;
+  }
+
+  .display-cover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 87%;
+    margin: 5% auto;
+    position: relative;
+  }
+
+  video {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .video-options {
+    position: absolute;
+    left: 1rem;
+    top: 2rem;
+  }
+
+  .controls {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    display: flex;
+
+    &>button {
+      width: 45px;
+      height: 45px;
+      text-align: center;
+      border-radius: 100%;
+      margin: 0 6px;
+      background: transparent;
+    }
+
+    &s>button:hover svg {
+      color: white !important;
+    }
+
+    @media (min-width: 300px) and (max-width: 400px) {
+      & {
+        flex-direction: column;
+      }
+
+      & button {
+        margin: 5px 0 !important;
+      }
+    }
+
+    &>button>svg {
+      height: 20px;
+      width: 18px;
+      text-align: center;
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    & button:nth-child(1) {
+      border: 2px solid #D2002E;
+    }
+
+    & button:nth-child(1) svg {
+      color: #D2002E;
+    }
+
+    & button:nth-child(2) {
+      border: 2px solid #008496;
+    }
+
+    & button:nth-child(2) svg {
+      color: #008496;
+    }
+
+    & button:nth-child(3) {
+      border: 2px solid #00B541;
+    }
+
+    & button:nth-child(3) svg {
+      color: #00B541;
+    }
+
+    &>button {
+      width: 45px;
+      height: 45px;
+      text-align: center;
+      border-radius: 100%;
+      margin: 0 6px;
+      background: transparent;
+    }
+
+    &>button:hover svg {
+      color: white;
+    }
   }
 </style>

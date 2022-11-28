@@ -20033,9 +20033,14 @@ exports["default"] = (0, vue_1.defineComponent)({
         const selectVal = (0, vue_2.ref)(null);
         const cameras = (0, vue_2.ref)([{}]);
         let streamStarted = false;
-        let myStreamSrc = (0, vue_2.ref)(null);
-        let cameraId = '';
-        let myVideoEl = (0, vue_2.ref)();
+        const myStreamSrc = (0, vue_2.ref)(null);
+        const cameraId = (0, vue_2.ref)('');
+        const myVideoEl = (0, vue_2.ref)(null);
+        const playBtn = (0, vue_2.ref)(null);
+        const pauseBtn = (0, vue_2.ref)(null);
+        const shotBtn = (0, vue_2.ref)(null);
+        ;
+        ;
         const constraints = {
             video: {
                 width: {
@@ -20053,7 +20058,7 @@ exports["default"] = (0, vue_1.defineComponent)({
         const getCameraSelection = () => __awaiter(this, void 0, void 0, function* () {
             const devices = yield navigator.mediaDevices.enumerateDevices();
             const videoDevices = devices.filter(device => device.kind === 'videoinput');
-            const options = videoDevices.map((videoDevice, i) => {
+            const options = yield videoDevices.map((videoDevice, i) => {
                 return { id: videoDevice.deviceId, label: videoDevice.label || String(i + 1) };
             });
             cameras.value = options;
@@ -20065,7 +20070,7 @@ exports["default"] = (0, vue_1.defineComponent)({
             }
             if ('mediaDevices' in navigator && navigator.mediaDevices.getUserMedia) {
                 const updatedConstraints = Object.assign(Object.assign({}, constraints), { deviceId: {
-                        exact: cameraId
+                        exact: cameraId.value
                     } });
                 startStream(updatedConstraints);
             }
@@ -20075,13 +20080,24 @@ exports["default"] = (0, vue_1.defineComponent)({
             handleStream(stream);
         });
         const handleStream = (stream) => {
-            myStreamSrc = stream;
+            myStreamSrc.value = stream;
+            render();
             streamStarted = true;
         };
         const changeCamera = (event) => {
-            cameraId = event.target.value;
+            const option = event.target;
+            cameraId.value = option.value;
         };
-        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, get myStreamSrc() { return myStreamSrc; }, set myStreamSrc(v) { myStreamSrc = v; }, get cameraId() { return cameraId; }, set cameraId(v) { cameraId = v; }, get myVideoEl() { return myVideoEl; }, set myVideoEl(v) { myVideoEl = v; }, constraints, getCameraSelection, playVideo, startStream, handleStream, changeCamera };
+        const render = () => __awaiter(this, void 0, void 0, function* () {
+            yield (0, vue_2.nextTick)();
+            myVideoEl.value.srcObject = myStreamSrc.value;
+            myVideoEl.value.classList.remove('d-none');
+            streamStarted = true;
+            playBtn.value.classList.add('d-none');
+            pauseBtn.value.classList.remove('d-none');
+            shotBtn.value.classList.remove('d-none');
+        });
+        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, myVideoEl, playBtn, pauseBtn, shotBtn, constraints, getCameraSelection, playVideo, startStream, handleStream, changeCamera, render };
         Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true });
         return __returned__;
     }
@@ -20129,31 +20145,32 @@ const _hoisted_2 = ["srcObject"];
 const _hoisted_3 = (0, vue_1.createElementVNode)("canvas", { class: "d-none" }, null, -1);
 const _hoisted_4 = { class: "video-options" };
 const _hoisted_5 = (0, vue_1.createElementVNode)("label", { for: "selectcamera" }, "Select camera", -1);
-const _hoisted_6 = ["value"];
-const _hoisted_7 = { class: "controls" };
-const _hoisted_8 = {
-    key: 0,
-    class: "btn d-none",
-    title: "Pause"
-};
+const _hoisted_6 = (0, vue_1.createElementVNode)("br", null, null, -1);
+const _hoisted_7 = ["value"];
+const _hoisted_8 = { class: "controls" };
 const _hoisted_9 = {
     class: "btn d-none",
-    title: "ScreenShot"
+    title: "Pause",
+    ref: "pauseBtn"
+};
+const _hoisted_10 = {
+    class: "btn d-none",
+    title: "ScreenShot",
+    ref: "shotBtn"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_vue_feather = (0, vue_1.resolveComponent)("vue-feather");
     return ((0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("div", _hoisted_1, [
-        ($setup.myStreamSrc)
-            ? ((0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("video", {
-                key: 0,
-                id: "myVideoEl",
-                srcObject: $setup.myStreamSrc,
-                autoplay: "autoplay"
-            }, null, 8, _hoisted_2))
-            : (0, vue_1.createCommentVNode)("v-if", true),
+        (0, vue_1.createElementVNode)("video", {
+            class: "d-none",
+            ref: "myVideoEl",
+            srcObject: $setup.myStreamSrc,
+            autoplay: "autoplay"
+        }, null, 8, _hoisted_2),
         _hoisted_3,
         (0, vue_1.createElementVNode)("div", _hoisted_4, [
             _hoisted_5,
+            _hoisted_6,
             (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("select", {
                 name: "selectcamera",
                 "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => (($setup.selectVal) = $event)),
@@ -20164,32 +20181,27 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     return ((0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("option", {
                         value: camera.id,
                         key: index
-                    }, (0, vue_1.toDisplayString)(camera.label), 9, _hoisted_6));
+                    }, (0, vue_1.toDisplayString)(camera.label), 9, _hoisted_7));
                 }), 128))
             ], 544), [
                 [vue_1.vModelSelect, $setup.selectVal]
             ])
         ]),
-        (0, vue_1.createElementVNode)("div", _hoisted_7, [
+        (0, vue_1.createElementVNode)("div", _hoisted_8, [
             (0, vue_1.createElementVNode)("button", {
                 class: "btn play",
                 title: "Play",
-                onClick: $setup.playVideo
+                onClick: $setup.playVideo,
+                ref: "playBtn"
             }, [
                 (0, vue_1.createVNode)(_component_vue_feather, { type: "play-circle" })
-            ]),
-            ($setup.streamStarted)
-                ? ((0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("button", _hoisted_8, [
-                    (0, vue_1.createVNode)(_component_vue_feather, {
-                        type: "pause",
-                        stroke: "red",
-                        fill: "blue"
-                    })
-                ]))
-                : (0, vue_1.createCommentVNode)("v-if", true),
+            ], 512),
             (0, vue_1.createElementVNode)("button", _hoisted_9, [
+                (0, vue_1.createVNode)(_component_vue_feather, { type: "pause" })
+            ], 512),
+            (0, vue_1.createElementVNode)("button", _hoisted_10, [
                 (0, vue_1.createVNode)(_component_vue_feather, { type: "image" })
-            ])
+            ], 512)
         ])
     ]));
 }
