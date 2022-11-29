@@ -67,22 +67,25 @@ video {
   padding: 0;
 }
 .controls button:nth-child(1) {
-  border: 2px solid #D2002E;
+  border: 2px solid red;
 }
 .controls button:nth-child(1) svg {
-  color: #D2002E;
+  color: red;
 }
 .controls button:nth-child(2) {
-  border: 2px solid #008496;
+  border: 2px solid lightblue;
 }
 .controls button:nth-child(2) svg {
-  color: #008496;
+  color: lightblue;
 }
 .controls button:nth-child(3) {
-  border: 2px solid #00B541;
+  border: 2px solid lightgreen;
 }
 .controls button:nth-child(3) svg {
-  color: #00B541;
+  color: lightgreen;
+}
+.controls button:nth-child(3):hover {
+  background-color: green;
 }
 .controls > button {
   width: 45px;

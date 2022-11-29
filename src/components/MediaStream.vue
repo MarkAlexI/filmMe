@@ -16,7 +16,7 @@
       <button class="btn play" title="Play" @click="playVideo" ref="playBtn">
         <vue-feather type="play-circle" />
       </button>
-      <button class="btn d-none" title="Pause" ref="pauseBtn">
+      <button class="btn d-none" title="Pause" ref="pauseBtn" @click="pauseVideo">
         <vue-feather type="pause" />
       </button>
       <button class="btn d-none" title="ScreenShot" ref="shotBtn">
@@ -35,7 +35,7 @@
   let streamStarted = false;
   const myStreamSrc = ref(null);
   const cameraId = ref('');
-  
+
   const myVideoEl = ref(null);
   const playBtn = ref(null);
   const pauseBtn = ref(null);
@@ -58,8 +58,8 @@
         ideal: number,
         max: number
       },
-      deviceId ? : {
-        exact ? : string
+      deviceId? : {
+        exact? : string
       }
     }
   };
@@ -79,7 +79,7 @@
     }
   };
 
-  const getCameraSelection = async (): Promise<void> => {
+  const getCameraSelection = async (): Promise < void > => {
     const devices = await navigator.mediaDevices.enumerateDevices();
     const videoDevices = devices.filter(device => device.kind === 'videoinput');
     const options = await videoDevices.map((videoDevice, i) => {
@@ -93,7 +93,9 @@
 
   const playVideo = (): void => {
     if (streamStarted) {
-
+      myVideoEl.value.play();
+      playBtn.value.classList.add('d-none');
+      pauseBtn.value.classList.remove('d-none');
       return;
     }
     if ('mediaDevices' in navigator && navigator.mediaDevices.getUserMedia) {
@@ -107,14 +109,18 @@
     }
   };
 
-  const startStream = async (constraints: mediaConstraints): Promise<void> => {
+  const pauseVideo = (): void => {
+    render('pause');
+  };
+
+  const startStream = async (constraints: mediaConstraints): Promise < void > => {
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
     handleStream(stream);
   };
 
   const handleStream = (stream: MediaStream): void => {
     myStreamSrc.value = stream;
-    render();
+    render('play');
     streamStarted = true;
   };
 
@@ -123,15 +129,21 @@
     cameraId.value = option.value;
   };
 
-  const render = async (): Promise<void> => {
+  const render = async (videoState: string): Promise < void > => {
     await nextTick();
+
+    if (videoState === 'play') {
+      myVideoEl.value.classList.remove('d-none');
+      playBtn.value.classList.add('d-none');
+      pauseBtn.value.classList.remove('d-none');
+      shotBtn.value.classList.remove('d-none');
+    }
     
-    myVideoEl.value.srcObject = myStreamSrc.value;
-    myVideoEl.value.classList.remove('d-none');
-    streamStarted = true;
-    playBtn.value.classList.add('d-none');
-    pauseBtn.value.classList.remove('d-none');
-    shotBtn.value.classList.remove('d-none');
+    if (videoState === 'pause') {
+      myVideoEl.value.pause();
+      playBtn.value.classList.remove('d-none');
+      pauseBtn.value.classList.add('d-none');
+    }
   };
 </script>
 
@@ -204,27 +216,31 @@
     }
 
     & button:nth-child(1) {
-      border: 2px solid #D2002E;
+      border: 2px solid red;
     }
 
     & button:nth-child(1) svg {
-      color: #D2002E;
+      color: red;
     }
 
     & button:nth-child(2) {
-      border: 2px solid #008496;
+      border: 2px solid lightblue;
     }
 
     & button:nth-child(2) svg {
-      color: #008496;
+      color: lightblue;
     }
 
     & button:nth-child(3) {
-      border: 2px solid #00B541;
+      border: 2px solid lightgreen;
     }
 
     & button:nth-child(3) svg {
-      color: #00B541;
+      color: lightgreen;
+    }
+    
+    & button:nth-child(3):hover {
+      background-color: green;
     }
 
     &>button {
@@ -235,7 +251,7 @@
       margin: 0 6px;
       background: transparent;
     }
-
+    
     &>button:hover svg {
       color: white;
     }

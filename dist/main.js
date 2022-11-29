@@ -20066,6 +20066,9 @@ exports["default"] = (0, vue_1.defineComponent)({
         getCameraSelection();
         const playVideo = () => {
             if (streamStarted) {
+                myVideoEl.value.play();
+                playBtn.value.classList.add('d-none');
+                pauseBtn.value.classList.remove('d-none');
                 return;
             }
             if ('mediaDevices' in navigator && navigator.mediaDevices.getUserMedia) {
@@ -20075,29 +20078,37 @@ exports["default"] = (0, vue_1.defineComponent)({
                 startStream(updatedConstraints);
             }
         };
+        const pauseVideo = () => {
+            render('pause');
+        };
         const startStream = (constraints) => __awaiter(this, void 0, void 0, function* () {
             const stream = yield navigator.mediaDevices.getUserMedia(constraints);
             handleStream(stream);
         });
         const handleStream = (stream) => {
             myStreamSrc.value = stream;
-            render();
+            render('play');
             streamStarted = true;
         };
         const changeCamera = (event) => {
             const option = event.target;
             cameraId.value = option.value;
         };
-        const render = () => __awaiter(this, void 0, void 0, function* () {
+        const render = (videoState) => __awaiter(this, void 0, void 0, function* () {
             yield (0, vue_2.nextTick)();
-            myVideoEl.value.srcObject = myStreamSrc.value;
-            myVideoEl.value.classList.remove('d-none');
-            streamStarted = true;
-            playBtn.value.classList.add('d-none');
-            pauseBtn.value.classList.remove('d-none');
-            shotBtn.value.classList.remove('d-none');
+            if (videoState === 'play') {
+                myVideoEl.value.classList.remove('d-none');
+                playBtn.value.classList.add('d-none');
+                pauseBtn.value.classList.remove('d-none');
+                shotBtn.value.classList.remove('d-none');
+            }
+            if (videoState === 'pause') {
+                myVideoEl.value.pause();
+                playBtn.value.classList.remove('d-none');
+                pauseBtn.value.classList.add('d-none');
+            }
         });
-        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, myVideoEl, playBtn, pauseBtn, shotBtn, constraints, getCameraSelection, playVideo, startStream, handleStream, changeCamera, render };
+        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, myVideoEl, playBtn, pauseBtn, shotBtn, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, render };
         Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true });
         return __returned__;
     }
@@ -20150,11 +20161,6 @@ const _hoisted_7 = ["value"];
 const _hoisted_8 = { class: "controls" };
 const _hoisted_9 = {
     class: "btn d-none",
-    title: "Pause",
-    ref: "pauseBtn"
-};
-const _hoisted_10 = {
-    class: "btn d-none",
     title: "ScreenShot",
     ref: "shotBtn"
 };
@@ -20196,10 +20202,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }, [
                 (0, vue_1.createVNode)(_component_vue_feather, { type: "play-circle" })
             ], 512),
-            (0, vue_1.createElementVNode)("button", _hoisted_9, [
+            (0, vue_1.createElementVNode)("button", {
+                class: "btn d-none",
+                title: "Pause",
+                ref: "pauseBtn",
+                onClick: $setup.pauseVideo
+            }, [
                 (0, vue_1.createVNode)(_component_vue_feather, { type: "pause" })
             ], 512),
-            (0, vue_1.createElementVNode)("button", _hoisted_10, [
+            (0, vue_1.createElementVNode)("button", _hoisted_9, [
                 (0, vue_1.createVNode)(_component_vue_feather, { type: "image" })
             ], 512)
         ])
