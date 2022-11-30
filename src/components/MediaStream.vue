@@ -23,12 +23,15 @@
         <vue-feather type="image" />
       </button>
     </div>
+    
+    <BatteryInfo />
   </div>
 </template>
 
 <script setup lang="ts">
   /// <reference types="webrtc" />
   import { ref, nextTick } from 'vue';
+  import BatteryInfo from '@/BatteryInfo';
 
   const selectVal: null = ref(null);
   const cameras = ref([{}]);
@@ -148,12 +151,6 @@
 </script>
 
 <style lang="scss">
-  h1 {
-    font-size: 1.8rem;
-    color: rebeccapurple;
-    margin-bottom: 1.9rem;
-  }
-
   .d-none {
     display: none;
   }
@@ -176,6 +173,10 @@
     position: absolute;
     left: 1rem;
     top: 2rem;
+  }
+  
+  canvas {
+    margin-bottom: 1rem;
   }
 
   .controls {

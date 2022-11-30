@@ -5,15 +5,23 @@ h1 {
   font-size: 28px;
   color: rebeccapurple;
   margin-bottom: 30px;
+  text-align: center;
+}
+/*!********************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/components/BatteryInfo.vue?vue&type=style&index=0&id=26e250db&lang=scss ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************/
+.battery {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+}
+.battery p {
+  font-size: 0.8rem;
+  color: yellow;
 }
 /*!********************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[7].use[0]!./src/components/MediaStream.vue?vue&type=style&index=0&id=3e7a8c84&lang=scss ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************/
-h1 {
-  font-size: 1.8rem;
-  color: rebeccapurple;
-  margin-bottom: 1.9rem;
-}
 .d-none {
   display: none;
 }
@@ -33,6 +41,9 @@ video {
   position: absolute;
   left: 1rem;
   top: 2rem;
+}
+canvas {
+  margin-bottom: 1rem;
 }
 .controls {
   position: absolute;
@@ -106,7 +117,10 @@ video {
   padding: 0;
 }
 .container {
+  padding-top: 1rem;
   margin: 10px 20px;
+  background-color: rgb(0, 250, 154);
+  min-height: 220px;
 }
 
 /*# sourceMappingURL=main.css.map*/

@@ -11,5 +11,6 @@
     font-size: 28px;
     color: rebeccapurple;
     margin-bottom: 30px;
+    text-align: center;
   }
 </style>

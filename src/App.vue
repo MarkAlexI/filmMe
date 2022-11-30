@@ -8,7 +8,7 @@
 <script setup lang="ts">
   import MyHeader from '@/MyHeader';
   import MediaStream from '@/MediaStream';
-  
+ 
 </script>
 
 <style lang="scss">
@@ -18,6 +18,9 @@
   }
 
   .container {
+    padding-top: 1rem;
     margin: 10px 20px;
+    background-color: rgba(0, 250, 154);
+    min-height: 220px;
   }
 </style>
