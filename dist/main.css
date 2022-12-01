@@ -36,14 +36,23 @@ h1 {
 video {
   width: 100%;
   background: rgba(0, 0, 0, 0.2);
+  margin-bottom: 1rem;
 }
 .video-options {
   position: absolute;
   left: 1rem;
   top: 2rem;
 }
-canvas {
-  margin-bottom: 1rem;
+.screenshot-image {
+  width: 90px;
+  height: 150px;
+  border-radius: 4px;
+  border: 2px solid whitesmoke;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  position: absolute;
+  bottom: 5px;
+  left: 10px;
+  background: white;
 }
 .controls {
   position: absolute;

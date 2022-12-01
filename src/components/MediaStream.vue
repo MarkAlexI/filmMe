@@ -1,7 +1,7 @@
 <template>
   <div class="display-cover">
     <video class="d-none" ref="myVideoEl" :srcObject="myStreamSrc" autoplay="autoplay"></video>
-    <canvas class="d-none"></canvas>
+    <canvas class="d-none" ref="canvas"></canvas>
     <div class="video-options">
       <label for="selectcamera">Select camera</label>
       <br>
@@ -12,6 +12,8 @@
       </select>
     </div>
 
+    <img class="screenshot-image d-none" alt="" ref="screenshot">
+
     <div class="controls">
       <button class="btn play" title="Play" @click="playVideo" ref="playBtn">
         <vue-feather type="play-circle" />
@@ -19,7 +21,7 @@
       <button class="btn d-none" title="Pause" ref="pauseBtn" @click="pauseVideo">
         <vue-feather type="pause" />
       </button>
-      <button class="btn d-none" title="ScreenShot" ref="shotBtn">
+      <button class="btn d-none" title="ScreenShot" ref="shotBtn" @click="doScreenshot">
         <vue-feather type="image" />
       </button>
     </div>
@@ -43,6 +45,8 @@
   const playBtn = ref(null);
   const pauseBtn = ref(null);
   const shotBtn = ref(null);
+  const canvas = ref(null);
+  const screenshot = ref(null);
 
   interface devices {
     id: string,
@@ -148,6 +152,14 @@
       pauseBtn.value.classList.add('d-none');
     }
   };
+  
+  const doScreenshot = () => {
+    canvas.value.width = myVideoEl.value.videoWidth;
+    canvas.value.height = myVideoEl.value.videoHeight;
+    canvas.value.getContext('2d').drawImage(myVideoEl.value, 0, 0);
+    screenshot.value.src = canvas.value.toDataURL('image/webp');
+    screenshot.value.classList.remove('d-none');
+  };
 </script>
 
 <style lang="scss">
@@ -167,6 +179,7 @@
   video {
     width: 100%;
     background: rgba(0, 0, 0, 0.2);
+    margin-bottom: 1.1rem;
   }
 
   .video-options {
@@ -175,8 +188,16 @@
     top: 2rem;
   }
   
-  canvas {
-    margin-bottom: 1rem;
+  .screenshot-image {
+    width: 90px;
+    height: 150px;
+    border-radius: 4px;
+    border: 2px solid whitesmoke;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    background: white;
   }
 
   .controls {

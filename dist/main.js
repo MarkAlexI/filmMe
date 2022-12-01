@@ -20098,6 +20098,8 @@ exports["default"] = (0, vue_1.defineComponent)({
         const playBtn = (0, vue_2.ref)(null);
         const pauseBtn = (0, vue_2.ref)(null);
         const shotBtn = (0, vue_2.ref)(null);
+        const canvas = (0, vue_2.ref)(null);
+        const screenshot = (0, vue_2.ref)(null);
         ;
         ;
         const constraints = {
@@ -20167,7 +20169,14 @@ exports["default"] = (0, vue_1.defineComponent)({
                 pauseBtn.value.classList.add('d-none');
             }
         });
-        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, myVideoEl, playBtn, pauseBtn, shotBtn, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, render, get BatteryInfo() { return BatteryInfo_1.default; } };
+        const doScreenshot = () => {
+            canvas.value.width = myVideoEl.value.videoWidth;
+            canvas.value.height = myVideoEl.value.videoHeight;
+            canvas.value.getContext('2d').drawImage(myVideoEl.value, 0, 0);
+            screenshot.value.src = canvas.value.toDataURL('image/webp');
+            screenshot.value.classList.remove('d-none');
+        };
+        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, myVideoEl, playBtn, pauseBtn, shotBtn, canvas, screenshot, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, render, doScreenshot, get BatteryInfo() { return BatteryInfo_1.default; } };
         Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true });
         return __returned__;
     }
@@ -20245,17 +20254,20 @@ exports.render = void 0;
 const vue_1 = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 const _hoisted_1 = { class: "display-cover" };
 const _hoisted_2 = ["srcObject"];
-const _hoisted_3 = (0, vue_1.createElementVNode)("canvas", { class: "d-none" }, null, -1);
+const _hoisted_3 = {
+    class: "d-none",
+    ref: "canvas"
+};
 const _hoisted_4 = { class: "video-options" };
 const _hoisted_5 = (0, vue_1.createElementVNode)("label", { for: "selectcamera" }, "Select camera", -1);
 const _hoisted_6 = (0, vue_1.createElementVNode)("br", null, null, -1);
 const _hoisted_7 = ["value"];
-const _hoisted_8 = { class: "controls" };
-const _hoisted_9 = {
-    class: "btn d-none",
-    title: "ScreenShot",
-    ref: "shotBtn"
+const _hoisted_8 = {
+    class: "screenshot-image d-none",
+    alt: "",
+    ref: "screenshot"
 };
+const _hoisted_9 = { class: "controls" };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_vue_feather = (0, vue_1.resolveComponent)("vue-feather");
     return ((0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("div", _hoisted_1, [
@@ -20265,7 +20277,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             srcObject: $setup.myStreamSrc,
             autoplay: "autoplay"
         }, null, 8, _hoisted_2),
-        _hoisted_3,
+        (0, vue_1.createElementVNode)("canvas", _hoisted_3, null, 512),
         (0, vue_1.createElementVNode)("div", _hoisted_4, [
             _hoisted_5,
             _hoisted_6,
@@ -20285,7 +20297,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 [vue_1.vModelSelect, $setup.selectVal]
             ])
         ]),
-        (0, vue_1.createElementVNode)("div", _hoisted_8, [
+        (0, vue_1.createElementVNode)("img", _hoisted_8, null, 512),
+        (0, vue_1.createElementVNode)("div", _hoisted_9, [
             (0, vue_1.createElementVNode)("button", {
                 class: "btn play",
                 title: "Play",
@@ -20302,7 +20315,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }, [
                 (0, vue_1.createVNode)(_component_vue_feather, { type: "pause" })
             ], 512),
-            (0, vue_1.createElementVNode)("button", _hoisted_9, [
+            (0, vue_1.createElementVNode)("button", {
+                class: "btn d-none",
+                title: "ScreenShot",
+                ref: "shotBtn",
+                onClick: $setup.doScreenshot
+            }, [
                 (0, vue_1.createVNode)(_component_vue_feather, { type: "image" })
             ], 512)
         ]),
