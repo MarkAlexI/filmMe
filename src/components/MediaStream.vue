@@ -26,14 +26,14 @@
       </button>
     </div>
     
-    <BatteryInfo />
+    <BatteryInfo></BatteryInfo>
   </div>
 </template>
 
 <script setup lang="ts">
   /// <reference types="webrtc" />
   import { ref, nextTick } from 'vue';
-  import BatteryInfo from '@/BatteryInfo';
+  import BatteryInfo from '@/BatteryInfo.vue';
 
   const selectVal: null = ref(null);
   const cameras = ref([{}]);
@@ -158,6 +158,7 @@
     canvas.value.height = myVideoEl.value.videoHeight;
     canvas.value.getContext('2d').drawImage(myVideoEl.value, 0, 0);
     screenshot.value.src = canvas.value.toDataURL('image/webp');
+    
     screenshot.value.classList.remove('d-none');
   };
 </script>

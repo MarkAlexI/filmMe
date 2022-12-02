@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <MyHeader></MyHeader>
-    <MediaStream></MediaStream>
+    <MyHeader />
+    <MediaStream />
   </div>
 </template>
 

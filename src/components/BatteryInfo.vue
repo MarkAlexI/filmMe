@@ -12,15 +12,17 @@
   const batteryLevel = ref(null);
   const batteryState = ref('battery');
 
-  const getBatteryLevel = async () => {
-    const batteryManager = await navigator.getBattery();
-    const level = batteryManager.level;
-    const charging = batteryManager.charging;
-    if (charging) batteryState.value = 'battery-charging';
-    batteryLevel.value.textContent = `${level * 100}%`;
-  };
+  if (haveBattery) {
+    const getBatteryLevel = async () => {
+      const batteryManager = await navigator.getBattery();
+      const level = batteryManager.level;
+      const charging = batteryManager.charging;
+      if (charging) batteryState.value = 'battery-charging';
+      batteryLevel.value.textContent = `${Math.round(level * 10000)/100}%`;
+    };
 
-  getBatteryLevel();
+    getBatteryLevel();
+  }
 </script>
 
 <style lang="scss">

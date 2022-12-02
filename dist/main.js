@@ -20046,16 +20046,18 @@ exports["default"] = (0, vue_1.defineComponent)({
         const haveBattery = !!navigator.getBattery;
         const batteryLevel = (0, vue_2.ref)(null);
         const batteryState = (0, vue_2.ref)('battery');
-        const getBatteryLevel = () => __awaiter(this, void 0, void 0, function* () {
-            const batteryManager = yield navigator.getBattery();
-            const level = batteryManager.level;
-            const charging = batteryManager.charging;
-            if (charging)
-                batteryState.value = 'battery-charging';
-            batteryLevel.value.textContent = `${level * 100}%`;
-        });
-        getBatteryLevel();
-        const __returned__ = { haveBattery, batteryLevel, batteryState, getBatteryLevel };
+        if (haveBattery) {
+            const getBatteryLevel = () => __awaiter(this, void 0, void 0, function* () {
+                const batteryManager = yield navigator.getBattery();
+                const level = batteryManager.level;
+                const charging = batteryManager.charging;
+                if (charging)
+                    batteryState.value = 'battery-charging';
+                batteryLevel.value.textContent = `${Math.round(level * 10000) / 100}%`;
+            });
+            getBatteryLevel();
+        }
+        const __returned__ = { haveBattery, batteryLevel, batteryState };
         Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true });
         return __returned__;
     }
@@ -20084,7 +20086,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vue_1 = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 const vue_2 = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-const BatteryInfo_1 = __webpack_require__(/*! @/BatteryInfo */ "./src/components/BatteryInfo.vue");
+const BatteryInfo_vue_1 = __webpack_require__(/*! @/BatteryInfo.vue */ "./src/components/BatteryInfo.vue");
 exports["default"] = (0, vue_1.defineComponent)({
     __name: 'MediaStream',
     setup(__props, { expose }) {
@@ -20176,7 +20178,7 @@ exports["default"] = (0, vue_1.defineComponent)({
             screenshot.value.src = canvas.value.toDataURL('image/webp');
             screenshot.value.classList.remove('d-none');
         };
-        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, myVideoEl, playBtn, pauseBtn, shotBtn, canvas, screenshot, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, render, doScreenshot, get BatteryInfo() { return BatteryInfo_1.default; } };
+        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, myVideoEl, playBtn, pauseBtn, shotBtn, canvas, screenshot, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, render, doScreenshot, BatteryInfo: BatteryInfo_vue_1.default };
         Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true });
         return __returned__;
     }

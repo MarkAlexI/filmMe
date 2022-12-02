@@ -11,14 +11,20 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/components*"]
-    }
+    },
+    "typeRoots": [
+      "./node_modules/@types",
+      "./typings"
+    ]
   },
   "strict": true,
   "files": [
     "./src/main.ts"
   ],
   "include": [
+    "typings",
     "src/**/*.vue",
-    "**/*.d.ts"
+    "**/*.d.ts",
+    "*.d.ts"
   ]
 }
