@@ -25,7 +25,7 @@
         <vue-feather type="image" />
       </button>
     </div>
-    
+
     <BatteryInfo></BatteryInfo>
   </div>
 </template>
@@ -48,6 +48,8 @@
   const canvas = ref(null);
   const screenshot = ref(null);
 
+  const srcData = ref(null);
+
   interface devices {
     id: string,
       label: string
@@ -65,8 +67,8 @@
         ideal: number,
         max: number
       },
-      deviceId? : {
-        exact? : string
+      deviceId ? : {
+        exact ? : string
       }
     }
   };
@@ -145,21 +147,50 @@
       pauseBtn.value.classList.remove('d-none');
       shotBtn.value.classList.remove('d-none');
     }
-    
+
     if (videoState === 'pause') {
       myVideoEl.value.pause();
       playBtn.value.classList.remove('d-none');
       pauseBtn.value.classList.add('d-none');
     }
   };
-  
-  const doScreenshot = () => {
+
+  const doScreenshot = (): void => {
     canvas.value.width = myVideoEl.value.videoWidth;
     canvas.value.height = myVideoEl.value.videoHeight;
     canvas.value.getContext('2d').drawImage(myVideoEl.value, 0, 0);
     screenshot.value.src = canvas.value.toDataURL('image/webp');
-    
     screenshot.value.classList.remove('d-none');
+    grabImageData();
+    remakeImage();
+  };
+
+  const grabImageData = (): void => {
+    const ctx = canvas.value.getContext('2d');
+    const imageData = ctx.getImageData(0, 0, canvas.value.width, canvas.value.height);
+    srcData.value = imageData;
+  };
+
+  const remakeImage = (): void => {
+    if (!srcData.value) return;
+
+    const canvasWidth = canvas.value.width;
+    const canvasHeight = canvas.value.height;
+
+    let buf8 = srcData.value.data;
+    for (let y = 0; y < canvasHeight; ++y) {
+      for (let x = 0; x < canvasWidth; ++x) {
+        let index = (y * canvasWidth + x) * 4;
+        buf8[index] *= .3;
+        buf8[++index] *= .59;
+        buf8[++index] *= .11;
+        buf8[++index] = 255;
+      }
+    }
+    srcData.value.data.set(buf8);
+    canvas.value.getContext('2d').putImageData(srcData.value, 0, 0);
+
+    screenshot.value.src = canvas.value.toDataURL('image/webp');
   };
 </script>
 
@@ -188,16 +219,16 @@
     left: 1rem;
     top: 2rem;
   }
-  
+
   .screenshot-image {
-    width: 90px;
-    height: 150px;
+    width: 5.625rem;
+    height: 9.375rem;
     border-radius: 4px;
     border: 2px solid whitesmoke;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
     position: absolute;
-    bottom: 5px;
-    left: 10px;
+    bottom: 1.5rem;
+    left: .6rem;
     background: white;
   }
 
@@ -261,7 +292,7 @@
     & button:nth-child(3) svg {
       color: lightgreen;
     }
-    
+
     & button:nth-child(3):hover {
       background-color: green;
     }
@@ -274,7 +305,7 @@
       margin: 0 6px;
       background: transparent;
     }
-    
+
     &>button:hover svg {
       color: white;
     }

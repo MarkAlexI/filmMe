@@ -20102,6 +20102,7 @@ exports["default"] = (0, vue_1.defineComponent)({
         const shotBtn = (0, vue_2.ref)(null);
         const canvas = (0, vue_2.ref)(null);
         const screenshot = (0, vue_2.ref)(null);
+        const srcData = (0, vue_2.ref)(null);
         ;
         ;
         const constraints = {
@@ -20177,8 +20178,34 @@ exports["default"] = (0, vue_1.defineComponent)({
             canvas.value.getContext('2d').drawImage(myVideoEl.value, 0, 0);
             screenshot.value.src = canvas.value.toDataURL('image/webp');
             screenshot.value.classList.remove('d-none');
+            grabImageData();
+            remakeImage();
         };
-        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, myVideoEl, playBtn, pauseBtn, shotBtn, canvas, screenshot, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, render, doScreenshot, BatteryInfo: BatteryInfo_vue_1.default };
+        const grabImageData = () => {
+            const ctx = canvas.value.getContext('2d');
+            const imageData = ctx.getImageData(0, 0, canvas.value.width, canvas.value.height);
+            srcData.value = imageData;
+        };
+        const remakeImage = () => {
+            if (!srcData.value)
+                return;
+            const canvasWidth = canvas.value.width;
+            const canvasHeight = canvas.value.height;
+            let buf8 = srcData.value.data;
+            for (let y = 0; y < canvasHeight; ++y) {
+                for (let x = 0; x < canvasWidth; ++x) {
+                    let index = (y * canvasWidth + x) * 4;
+                    buf8[index] *= .3;
+                    buf8[++index] *= .59;
+                    buf8[++index] *= .11;
+                    buf8[++index] = 255;
+                }
+            }
+            srcData.value.data.set(buf8);
+            canvas.value.getContext('2d').putImageData(srcData.value, 0, 0);
+            screenshot.value.src = canvas.value.toDataURL('image/webp');
+        };
+        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, myVideoEl, playBtn, pauseBtn, shotBtn, canvas, screenshot, srcData, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, render, doScreenshot, grabImageData, remakeImage, BatteryInfo: BatteryInfo_vue_1.default };
         Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true });
         return __returned__;
     }
