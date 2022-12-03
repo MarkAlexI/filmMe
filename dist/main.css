@@ -43,7 +43,7 @@ video {
   left: 1rem;
   top: 2rem;
 }
-.screenshot-image {
+.selfie, .original {
   width: 5.625rem;
   height: 9.375rem;
   border-radius: 4px;
@@ -51,8 +51,13 @@ video {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   position: absolute;
   bottom: 1.5rem;
-  left: 0.6rem;
   background: white;
+}
+.original {
+  left: 0.6rem;
+}
+.selfie {
+  left: 7rem;
 }
 .controls {
   position: absolute;

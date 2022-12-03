@@ -12,7 +12,8 @@
       </select>
     </div>
 
-    <img class="screenshot-image d-none" alt="" ref="screenshot">
+    <img class="screenshot-image original d-none" alt="" ref="screenshot">
+    <img class="screenshot-image selfie d-none" alt="" ref="selfie">
 
     <div class="controls">
       <button class="btn play" title="Play" @click="playVideo" ref="playBtn">
@@ -47,8 +48,10 @@
   const shotBtn = ref(null);
   const canvas = ref(null);
   const screenshot = ref(null);
+  const selfie = ref(null);
 
   const srcData = ref(null);
+  let cloned: Uint8ClampedArray | null = null;
 
   interface devices {
     id: string,
@@ -161,6 +164,7 @@
     canvas.value.getContext('2d').drawImage(myVideoEl.value, 0, 0);
     screenshot.value.src = canvas.value.toDataURL('image/webp');
     screenshot.value.classList.remove('d-none');
+    selfie.value.classList.remove('d-none');
     grabImageData();
     remakeImage();
   };
@@ -169,6 +173,7 @@
     const ctx = canvas.value.getContext('2d');
     const imageData = ctx.getImageData(0, 0, canvas.value.width, canvas.value.height);
     srcData.value = imageData;
+    cloned = new Uint8ClampedArray(imageData.data);
   };
 
   const remakeImage = (): void => {
@@ -176,8 +181,8 @@
 
     const canvasWidth = canvas.value.width;
     const canvasHeight = canvas.value.height;
+    let buf8 = new Uint8ClampedArray(cloned);
 
-    let buf8 = srcData.value.data;
     for (let y = 0; y < canvasHeight; ++y) {
       for (let x = 0; x < canvasWidth; ++x) {
         let index = (y * canvasWidth + x) * 4;
@@ -187,10 +192,11 @@
         buf8[++index] = 255;
       }
     }
+    
     srcData.value.data.set(buf8);
     canvas.value.getContext('2d').putImageData(srcData.value, 0, 0);
 
-    screenshot.value.src = canvas.value.toDataURL('image/webp');
+    selfie.value.src = canvas.value.toDataURL('image/webp');
   };
 </script>
 
@@ -220,7 +226,7 @@
     top: 2rem;
   }
 
-  .screenshot-image {
+  %screenshot {
     width: 5.625rem;
     height: 9.375rem;
     border-radius: 4px;
@@ -228,8 +234,17 @@
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
     position: absolute;
     bottom: 1.5rem;
-    left: .6rem;
     background: white;
+  }
+  
+  .original {
+    @extend %screenshot;
+    left: .6rem;
+  }
+  
+  .selfie {
+    @extend %screenshot;
+    left: 7rem;
   }
 
   .controls {

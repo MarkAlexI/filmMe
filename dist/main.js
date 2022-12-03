@@ -20102,7 +20102,9 @@ exports["default"] = (0, vue_1.defineComponent)({
         const shotBtn = (0, vue_2.ref)(null);
         const canvas = (0, vue_2.ref)(null);
         const screenshot = (0, vue_2.ref)(null);
+        const selfie = (0, vue_2.ref)(null);
         const srcData = (0, vue_2.ref)(null);
+        let cloned = null;
         ;
         ;
         const constraints = {
@@ -20178,6 +20180,7 @@ exports["default"] = (0, vue_1.defineComponent)({
             canvas.value.getContext('2d').drawImage(myVideoEl.value, 0, 0);
             screenshot.value.src = canvas.value.toDataURL('image/webp');
             screenshot.value.classList.remove('d-none');
+            selfie.value.classList.remove('d-none');
             grabImageData();
             remakeImage();
         };
@@ -20185,13 +20188,14 @@ exports["default"] = (0, vue_1.defineComponent)({
             const ctx = canvas.value.getContext('2d');
             const imageData = ctx.getImageData(0, 0, canvas.value.width, canvas.value.height);
             srcData.value = imageData;
+            cloned = new Uint8ClampedArray(imageData.data);
         };
         const remakeImage = () => {
             if (!srcData.value)
                 return;
             const canvasWidth = canvas.value.width;
             const canvasHeight = canvas.value.height;
-            let buf8 = srcData.value.data;
+            let buf8 = new Uint8ClampedArray(cloned);
             for (let y = 0; y < canvasHeight; ++y) {
                 for (let x = 0; x < canvasWidth; ++x) {
                     let index = (y * canvasWidth + x) * 4;
@@ -20203,9 +20207,9 @@ exports["default"] = (0, vue_1.defineComponent)({
             }
             srcData.value.data.set(buf8);
             canvas.value.getContext('2d').putImageData(srcData.value, 0, 0);
-            screenshot.value.src = canvas.value.toDataURL('image/webp');
+            selfie.value.src = canvas.value.toDataURL('image/webp');
         };
-        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, myVideoEl, playBtn, pauseBtn, shotBtn, canvas, screenshot, srcData, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, render, doScreenshot, grabImageData, remakeImage, BatteryInfo: BatteryInfo_vue_1.default };
+        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, myVideoEl, playBtn, pauseBtn, shotBtn, canvas, screenshot, selfie, srcData, get cloned() { return cloned; }, set cloned(v) { cloned = v; }, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, render, doScreenshot, grabImageData, remakeImage, BatteryInfo: BatteryInfo_vue_1.default };
         Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true });
         return __returned__;
     }
@@ -20292,11 +20296,16 @@ const _hoisted_5 = (0, vue_1.createElementVNode)("label", { for: "selectcamera" 
 const _hoisted_6 = (0, vue_1.createElementVNode)("br", null, null, -1);
 const _hoisted_7 = ["value"];
 const _hoisted_8 = {
-    class: "screenshot-image d-none",
+    class: "screenshot-image original d-none",
     alt: "",
     ref: "screenshot"
 };
-const _hoisted_9 = { class: "controls" };
+const _hoisted_9 = {
+    class: "screenshot-image selfie d-none",
+    alt: "",
+    ref: "selfie"
+};
+const _hoisted_10 = { class: "controls" };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_vue_feather = (0, vue_1.resolveComponent)("vue-feather");
     return ((0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("div", _hoisted_1, [
@@ -20327,7 +20336,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             ])
         ]),
         (0, vue_1.createElementVNode)("img", _hoisted_8, null, 512),
-        (0, vue_1.createElementVNode)("div", _hoisted_9, [
+        (0, vue_1.createElementVNode)("img", _hoisted_9, null, 512),
+        (0, vue_1.createElementVNode)("div", _hoisted_10, [
             (0, vue_1.createElementVNode)("button", {
                 class: "btn play",
                 title: "Play",
