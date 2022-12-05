@@ -20199,17 +20199,22 @@ exports["default"] = (0, vue_1.defineComponent)({
             for (let y = 0; y < canvasHeight; ++y) {
                 for (let x = 0; x < canvasWidth; ++x) {
                     let index = (y * canvasWidth + x) * 4;
-                    buf8[index] *= .3;
-                    buf8[++index] *= .59;
-                    buf8[++index] *= .11;
-                    buf8[++index] = 255;
+                    makeEffect(buf8, index, goGreen);
                 }
             }
             srcData.value.data.set(buf8);
             canvas.value.getContext('2d').putImageData(srcData.value, 0, 0);
             selfie.value.src = canvas.value.toDataURL('image/webp');
         };
-        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, myVideoEl, playBtn, pauseBtn, shotBtn, canvas, screenshot, selfie, srcData, get cloned() { return cloned; }, set cloned(v) { cloned = v; }, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, render, doScreenshot, grabImageData, remakeImage, BatteryInfo: BatteryInfo_vue_1.default };
+        const makeEffect = (arr, i, f) => {
+            let red = arr[i], green = arr[i + 1], blue = arr[i + 2], alfa = arr[i + 3];
+            const temp = f(red, green, blue, alfa);
+            [arr[i], arr[i + 1], arr[i + 2], arr[i + 3]] = temp;
+        };
+        const goGreen = (r, g, b, a) => {
+            return [r * .3, g * .59, b * .11, 255];
+        };
+        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, myVideoEl, playBtn, pauseBtn, shotBtn, canvas, screenshot, selfie, srcData, get cloned() { return cloned; }, set cloned(v) { cloned = v; }, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, render, doScreenshot, grabImageData, remakeImage, makeEffect, goGreen, BatteryInfo: BatteryInfo_vue_1.default };
         Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true });
         return __returned__;
     }

@@ -186,10 +186,7 @@
     for (let y = 0; y < canvasHeight; ++y) {
       for (let x = 0; x < canvasWidth; ++x) {
         let index = (y * canvasWidth + x) * 4;
-        buf8[index] *= .3;
-        buf8[++index] *= .59;
-        buf8[++index] *= .11;
-        buf8[++index] = 255;
+        makeEffect(buf8, index, goGreen);
       }
     }
     
@@ -197,6 +194,17 @@
     canvas.value.getContext('2d').putImageData(srcData.value, 0, 0);
 
     selfie.value.src = canvas.value.toDataURL('image/webp');
+  };
+  
+  const makeEffect = (arr: Uint8ClampedArray, i: number, f: Function): void => {
+    let red = arr[i], green = arr[i + 1],
+        blue = arr[i + 2], alfa = arr[i + 3];
+    const temp = f(red, green, blue, alfa);
+    [arr[i], arr[i + 1], arr[i + 2], arr[i + 3]] = temp;
+  };
+  
+  const goGreen = (r: number, g: number, b: number, a: number): number[] => {
+    return [r * .3, g * .59, b * .11, 255];
   };
 </script>
 
@@ -224,6 +232,10 @@
     position: absolute;
     left: 1rem;
     top: 2rem;
+    
+    & label {
+      text-shadow: 1px 1px 2px whitesmoke;
+    }
   }
 
   %screenshot {

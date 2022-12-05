@@ -43,6 +43,9 @@ video {
   left: 1rem;
   top: 2rem;
 }
+.video-options label {
+  text-shadow: 1px 1px 2px whitesmoke;
+}
 .selfie, .original {
   width: 5.625rem;
   height: 9.375rem;
