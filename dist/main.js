@@ -20091,11 +20091,19 @@ exports["default"] = (0, vue_1.defineComponent)({
     __name: 'MediaStream',
     setup(__props, { expose }) {
         expose();
+        const goGreen = (r, g, b, a) => {
+            return [r * .3, g * .59, b * .11, 255];
+        };
         const selectVal = (0, vue_2.ref)(null);
+        const selectEffect = (0, vue_2.ref)('none');
         const cameras = (0, vue_2.ref)([{}]);
+        const effects = (0, vue_2.ref)([
+            { name: 'goGreen', text: 'Make green photo', method: goGreen }
+        ]);
         let streamStarted = false;
         const myStreamSrc = (0, vue_2.ref)(null);
         const cameraId = (0, vue_2.ref)('');
+        const currentEffect = (0, vue_2.ref)('none');
         const myVideoEl = (0, vue_2.ref)(null);
         const playBtn = (0, vue_2.ref)(null);
         const pauseBtn = (0, vue_2.ref)(null);
@@ -20105,7 +20113,6 @@ exports["default"] = (0, vue_1.defineComponent)({
         const selfie = (0, vue_2.ref)(null);
         const srcData = (0, vue_2.ref)(null);
         let cloned = null;
-        ;
         ;
         const constraints = {
             video: {
@@ -20160,6 +20167,10 @@ exports["default"] = (0, vue_1.defineComponent)({
             const option = event.target;
             cameraId.value = option.value;
         };
+        const changeEffect = (event) => {
+            const option = event.target;
+            currentEffect.value = option.value;
+        };
         const render = (videoState) => __awaiter(this, void 0, void 0, function* () {
             yield (0, vue_2.nextTick)();
             if (videoState === 'play') {
@@ -20196,10 +20207,14 @@ exports["default"] = (0, vue_1.defineComponent)({
             const canvasWidth = canvas.value.width;
             const canvasHeight = canvas.value.height;
             let buf8 = new Uint8ClampedArray(cloned);
-            for (let y = 0; y < canvasHeight; ++y) {
-                for (let x = 0; x < canvasWidth; ++x) {
-                    let index = (y * canvasWidth + x) * 4;
-                    makeEffect(buf8, index, goGreen);
+            const effect = effects.value.find(el => el.name === currentEffect.value);
+            const action = effect === null || effect === void 0 ? void 0 : effect.method;
+            if (action) {
+                for (let y = 0; y < canvasHeight; ++y) {
+                    for (let x = 0; x < canvasWidth; ++x) {
+                        let index = (y * canvasWidth + x) * 4;
+                        makeEffect(buf8, index, action);
+                    }
                 }
             }
             srcData.value.data.set(buf8);
@@ -20211,10 +20226,7 @@ exports["default"] = (0, vue_1.defineComponent)({
             const temp = f(red, green, blue, alfa);
             [arr[i], arr[i + 1], arr[i + 2], arr[i + 3]] = temp;
         };
-        const goGreen = (r, g, b, a) => {
-            return [r * .3, g * .59, b * .11, 255];
-        };
-        const __returned__ = { selectVal, cameras, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, myVideoEl, playBtn, pauseBtn, shotBtn, canvas, screenshot, selfie, srcData, get cloned() { return cloned; }, set cloned(v) { cloned = v; }, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, render, doScreenshot, grabImageData, remakeImage, makeEffect, goGreen, BatteryInfo: BatteryInfo_vue_1.default };
+        const __returned__ = { goGreen, selectVal, selectEffect, cameras, effects, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, currentEffect, myVideoEl, playBtn, pauseBtn, shotBtn, canvas, screenshot, selfie, srcData, get cloned() { return cloned; }, set cloned(v) { cloned = v; }, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, changeEffect, render, doScreenshot, grabImageData, remakeImage, makeEffect, BatteryInfo: BatteryInfo_vue_1.default };
         Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true });
         return __returned__;
     }
@@ -20300,17 +20312,25 @@ const _hoisted_4 = { class: "video-options" };
 const _hoisted_5 = (0, vue_1.createElementVNode)("label", { for: "selectcamera" }, "Select camera", -1);
 const _hoisted_6 = (0, vue_1.createElementVNode)("br", null, null, -1);
 const _hoisted_7 = ["value"];
-const _hoisted_8 = {
+const _hoisted_8 = { class: "image-options" };
+const _hoisted_9 = (0, vue_1.createElementVNode)("label", { for: "select-effect" }, "Select effect", -1);
+const _hoisted_10 = (0, vue_1.createElementVNode)("br", null, null, -1);
+const _hoisted_11 = (0, vue_1.createElementVNode)("option", {
+    default: "",
+    value: "none"
+}, "---None---", -1);
+const _hoisted_12 = ["value"];
+const _hoisted_13 = {
     class: "screenshot-image original d-none",
     alt: "",
     ref: "screenshot"
 };
-const _hoisted_9 = {
+const _hoisted_14 = {
     class: "screenshot-image selfie d-none",
     alt: "",
     ref: "selfie"
 };
-const _hoisted_10 = { class: "controls" };
+const _hoisted_15 = { class: "controls" };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_vue_feather = (0, vue_1.resolveComponent)("vue-feather");
     return ((0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("div", _hoisted_1, [
@@ -20340,9 +20360,29 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 [vue_1.vModelSelect, $setup.selectVal]
             ])
         ]),
-        (0, vue_1.createElementVNode)("img", _hoisted_8, null, 512),
-        (0, vue_1.createElementVNode)("img", _hoisted_9, null, 512),
-        (0, vue_1.createElementVNode)("div", _hoisted_10, [
+        (0, vue_1.createElementVNode)("div", _hoisted_8, [
+            _hoisted_9,
+            _hoisted_10,
+            (0, vue_1.withDirectives)((0, vue_1.createElementVNode)("select", {
+                name: "select-effect",
+                "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => (($setup.selectEffect) = $event)),
+                class: "custom-select",
+                onChange: $setup.changeEffect
+            }, [
+                _hoisted_11,
+                ((0, vue_1.openBlock)(true), (0, vue_1.createElementBlock)(vue_1.Fragment, null, (0, vue_1.renderList)($setup.effects, (effect, index) => {
+                    return ((0, vue_1.openBlock)(), (0, vue_1.createElementBlock)("option", {
+                        value: effect.name,
+                        key: index
+                    }, (0, vue_1.toDisplayString)(effect.text), 9, _hoisted_12));
+                }), 128))
+            ], 544), [
+                [vue_1.vModelSelect, $setup.selectEffect]
+            ])
+        ]),
+        (0, vue_1.createElementVNode)("img", _hoisted_13, null, 512),
+        (0, vue_1.createElementVNode)("img", _hoisted_14, null, 512),
+        (0, vue_1.createElementVNode)("div", _hoisted_15, [
             (0, vue_1.createElementVNode)("button", {
                 class: "btn play",
                 title: "Play",

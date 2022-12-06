@@ -38,13 +38,18 @@ video {
   background: rgba(0, 0, 0, 0.2);
   margin-bottom: 1.1rem;
 }
-.video-options {
+.image-options, .video-options {
   position: absolute;
   left: 1rem;
-  top: 2rem;
 }
-.video-options label {
+.image-options label, .video-options label {
   text-shadow: 1px 1px 2px whitesmoke;
+}
+.video-options {
+  top: 1rem;
+}
+.image-options {
+  top: 4rem;
 }
 .selfie, .original {
   width: 5.625rem;

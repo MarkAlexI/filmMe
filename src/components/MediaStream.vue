@@ -11,6 +11,17 @@
         </option>
       </select>
     </div>
+    
+    <div class="image-options">
+      <label for="select-effect">Select effect</label>
+      <br>
+      <select name="select-effect" v-model="selectEffect" class="custom-select" @change="changeEffect">
+        <option default value="none">---None---</option>
+        <option v-for="(effect, index) in effects" :value="effect.name" :key="index">
+          {{ effect.text }}
+        </option>
+      </select>
+    </div>
 
     <img class="screenshot-image original d-none" alt="" ref="screenshot">
     <img class="screenshot-image selfie d-none" alt="" ref="selfie">
@@ -36,11 +47,20 @@
   import { ref, nextTick } from 'vue';
   import BatteryInfo from '@/BatteryInfo.vue';
 
+  const goGreen = (r: number, g: number, b: number, a: number): number[] => {
+    return [r * .3, g * .59, b * .11, 255];
+  };
+
   const selectVal: null = ref(null);
+  const selectEffect = ref('none');
   const cameras = ref([{}]);
+  const effects = ref([
+    { name: 'goGreen', text: 'Make green photo', method: goGreen }
+  ]);
   let streamStarted = false;
   const myStreamSrc = ref(null);
   const cameraId = ref('');
+  const currentEffect = ref('none');
 
   const myVideoEl = ref(null);
   const playBtn = ref(null);
@@ -52,11 +72,6 @@
 
   const srcData = ref(null);
   let cloned: Uint8ClampedArray | null = null;
-
-  interface devices {
-    id: string,
-      label: string
-  };
 
   interface mediaConstraints {
     video: {
@@ -140,6 +155,11 @@
     const option = event.target as HTMLOptionElement;
     cameraId.value = option.value;
   };
+  
+  const changeEffect = (event: Event): void => {
+    const option = event.target as HTMLOptionElement;
+    currentEffect.value = option.value;
+  };
 
   const render = async (videoState: string): Promise < void > => {
     await nextTick();
@@ -182,11 +202,15 @@
     const canvasWidth = canvas.value.width;
     const canvasHeight = canvas.value.height;
     let buf8 = new Uint8ClampedArray(cloned);
-
-    for (let y = 0; y < canvasHeight; ++y) {
-      for (let x = 0; x < canvasWidth; ++x) {
-        let index = (y * canvasWidth + x) * 4;
-        makeEffect(buf8, index, goGreen);
+    const effect = effects.value.find(el => el.name === currentEffect.value);
+    const action = effect?.method;
+   
+    if (action) {
+      for (let y = 0; y < canvasHeight; ++y) {
+        for (let x = 0; x < canvasWidth; ++x) {
+          let index = (y * canvasWidth + x) * 4;
+          makeEffect(buf8, index, action);
+        }
       }
     }
     
@@ -201,10 +225,6 @@
         blue = arr[i + 2], alfa = arr[i + 3];
     const temp = f(red, green, blue, alfa);
     [arr[i], arr[i + 1], arr[i + 2], arr[i + 3]] = temp;
-  };
-  
-  const goGreen = (r: number, g: number, b: number, a: number): number[] => {
-    return [r * .3, g * .59, b * .11, 255];
   };
 </script>
 
@@ -227,15 +247,24 @@
     background: rgba(0, 0, 0, 0.2);
     margin-bottom: 1.1rem;
   }
-
-  .video-options {
+  
+  %options {
     position: absolute;
     left: 1rem;
-    top: 2rem;
     
     & label {
       text-shadow: 1px 1px 2px whitesmoke;
     }
+  }
+
+  .video-options {
+    @extend %options;
+    top: 1rem;
+  }
+  
+  .image-options {
+    @extend %options;
+    top: 4rem;
   }
 
   %screenshot {
