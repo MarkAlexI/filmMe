@@ -20094,11 +20094,19 @@ exports["default"] = (0, vue_1.defineComponent)({
         const goGreen = (r, g, b, a) => {
             return [r * .3, g * .59, b * .11, 255];
         };
+        const mix = (r, g, b, a) => {
+            return [g, b, r, 255];
+        };
+        const goTransparent = (r, g, b, a) => {
+            return [r, g, b, 120];
+        };
         const selectVal = (0, vue_2.ref)(null);
         const selectEffect = (0, vue_2.ref)('none');
         const cameras = (0, vue_2.ref)([{}]);
         const effects = (0, vue_2.ref)([
-            { name: 'goGreen', text: 'Make green photo', method: goGreen }
+            { name: 'lessOpacity', text: 'Less opacity', method: goTransparent },
+            { name: 'goGreen', text: 'Make green photo', method: goGreen },
+            { name: 'mix', text: 'Mix this', method: mix }
         ]);
         let streamStarted = false;
         const myStreamSrc = (0, vue_2.ref)(null);
@@ -20226,7 +20234,7 @@ exports["default"] = (0, vue_1.defineComponent)({
             const temp = f(red, green, blue, alfa);
             [arr[i], arr[i + 1], arr[i + 2], arr[i + 3]] = temp;
         };
-        const __returned__ = { goGreen, selectVal, selectEffect, cameras, effects, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, currentEffect, myVideoEl, playBtn, pauseBtn, shotBtn, canvas, screenshot, selfie, srcData, get cloned() { return cloned; }, set cloned(v) { cloned = v; }, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, changeEffect, render, doScreenshot, grabImageData, remakeImage, makeEffect, BatteryInfo: BatteryInfo_vue_1.default };
+        const __returned__ = { goGreen, mix, goTransparent, selectVal, selectEffect, cameras, effects, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, currentEffect, myVideoEl, playBtn, pauseBtn, shotBtn, canvas, screenshot, selfie, srcData, get cloned() { return cloned; }, set cloned(v) { cloned = v; }, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, changeEffect, render, doScreenshot, grabImageData, remakeImage, makeEffect, BatteryInfo: BatteryInfo_vue_1.default };
         Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true });
         return __returned__;
     }

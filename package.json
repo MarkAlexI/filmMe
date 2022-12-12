@@ -1,7 +1,7 @@
 {
   "name": "filmMe",
   "description": "Selfie maker app with image processing effects. The project will make friends WebRTC, Vue and Typescript.",
-  "version": "0.8.3",
+  "version": "0.9.3",
   "main": "main.js",
   "scripts": {
     "install-dep": "npm i",

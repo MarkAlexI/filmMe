@@ -46,16 +46,28 @@
   /// <reference types="webrtc" />
   import { ref, nextTick } from 'vue';
   import BatteryInfo from '@/BatteryInfo.vue';
+  
+  type mixFunction = (r: number, g: number, b: number, a: number) => number[];
 
-  const goGreen = (r: number, g: number, b: number, a: number): number[] => {
+  const goGreen: mixFunction = (r, g, b, a) => {
     return [r * .3, g * .59, b * .11, 255];
+  };
+  
+  const mix: mixFunction = (r, g, b, a) => {
+    return [g, b, r, 255];
+  };
+  
+  const goTransparent: mixFunction = (r, g, b, a) => {
+    return [r, g, b, 120];
   };
 
   const selectVal: null = ref(null);
   const selectEffect = ref('none');
   const cameras = ref([{}]);
   const effects = ref([
-    { name: 'goGreen', text: 'Make green photo', method: goGreen }
+    { name: 'lessOpacity', text: 'Less opacity', method: goTransparent },
+    { name: 'goGreen', text: 'Make green photo', method: goGreen },
+    { name: 'mix', text: 'Mix this', method: mix }
   ]);
   let streamStarted = false;
   const myStreamSrc = ref(null);
@@ -295,11 +307,11 @@
     display: flex;
 
     &>button {
-      width: 45px;
-      height: 45px;
+      width: 2.8125rem;
+      height: 2.8125rem;
       text-align: center;
       border-radius: 100%;
-      margin: 0 6px;
+      margin: 0 .375rem;
       background: transparent;
     }
 
@@ -318,8 +330,8 @@
     }
 
     &>button>svg {
-      height: 20px;
-      width: 18px;
+      height: 1.25rem;
+      width: 1.125rem;
       text-align: center;
       margin: 0 auto;
       padding: 0;
@@ -354,11 +366,11 @@
     }
 
     &>button {
-      width: 45px;
-      height: 45px;
+      width: 2.8125rem;
+      height: 2.8125rem;
       text-align: center;
       border-radius: 100%;
-      margin: 0 6px;
+      margin: 0 .375rem;
       background: transparent;
     }
 
