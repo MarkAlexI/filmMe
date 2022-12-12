@@ -23,8 +23,8 @@
       </select>
     </div>
 
-    <img class="screenshot-image original d-none" alt="" ref="screenshot">
-    <img class="screenshot-image selfie d-none" alt="" ref="selfie">
+    <img class="screenshot-image original d-none" alt="original image" ref="screenshot">
+    <img class="screenshot-image selfie d-none" alt="selfie image" ref="selfie">
 
     <div class="controls">
       <button class="btn play" title="Play" @click="playVideo" ref="playBtn">
@@ -36,6 +36,9 @@
       <button class="btn d-none" title="ScreenShot" ref="shotBtn" @click="doScreenshot">
         <vue-feather type="image" />
       </button>
+      <button class="btn d-none" title="Save" ref="saveBtn" @click="saveSelfie">
+        <vue-feather type="save" />
+      </button>
     </div>
 
     <BatteryInfo></BatteryInfo>
@@ -46,8 +49,6 @@
   /// <reference types="webrtc" />
   import { ref, nextTick } from 'vue';
   import BatteryInfo from '@/BatteryInfo.vue';
-  
-  type mixFunction = (r: number, g: number, b: number, a: number) => number[];
 
   const goGreen: mixFunction = (r, g, b, a) => {
     return [r * .3, g * .59, b * .11, 255];
@@ -78,6 +79,8 @@
   const playBtn = ref(null);
   const pauseBtn = ref(null);
   const shotBtn = ref(null);
+  const saveBtn = ref(null);
+  
   const canvas = ref(null);
   const screenshot = ref(null);
   const selfie = ref(null);
@@ -197,6 +200,7 @@
     screenshot.value.src = canvas.value.toDataURL('image/webp');
     screenshot.value.classList.remove('d-none');
     selfie.value.classList.remove('d-none');
+    saveBtn.value.classList.remove('d-none');
     grabImageData();
     remakeImage();
   };
@@ -237,6 +241,14 @@
         blue = arr[i + 2], alfa = arr[i + 3];
     const temp = f(red, green, blue, alfa);
     [arr[i], arr[i + 1], arr[i + 2], arr[i + 3]] = temp;
+  };
+  
+  const saveSelfie = (): void => {
+    const image = canvas.value.toDataURL("image/png");
+    let link = document.createElement('a');
+    link.setAttribute("download", "Selfie.png");
+    link.setAttribute("href", image);
+    link.click();
   };
 </script>
 
@@ -319,7 +331,7 @@
       color: white !important;
     }
 
-    @media (min-width: 300px) and (max-width: 400px) {
+    @media (min-width: 300px) and (max-width: 420px) {
       & {
         flex-direction: column;
       }
@@ -363,6 +375,18 @@
 
     & button:nth-child(3):hover {
       background-color: green;
+    }
+    
+    & button:nth-child(4) {
+      border: 2px solid blue;
+    }
+    
+    & button:nth-child(4) svg {
+      color: blue;
+    }
+    
+    & button:nth-child(4):hover {
+      background-color: lightblue;
     }
 
     &>button {

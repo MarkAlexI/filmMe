@@ -20116,6 +20116,7 @@ exports["default"] = (0, vue_1.defineComponent)({
         const playBtn = (0, vue_2.ref)(null);
         const pauseBtn = (0, vue_2.ref)(null);
         const shotBtn = (0, vue_2.ref)(null);
+        const saveBtn = (0, vue_2.ref)(null);
         const canvas = (0, vue_2.ref)(null);
         const screenshot = (0, vue_2.ref)(null);
         const selfie = (0, vue_2.ref)(null);
@@ -20200,6 +20201,7 @@ exports["default"] = (0, vue_1.defineComponent)({
             screenshot.value.src = canvas.value.toDataURL('image/webp');
             screenshot.value.classList.remove('d-none');
             selfie.value.classList.remove('d-none');
+            saveBtn.value.classList.remove('d-none');
             grabImageData();
             remakeImage();
         };
@@ -20234,7 +20236,14 @@ exports["default"] = (0, vue_1.defineComponent)({
             const temp = f(red, green, blue, alfa);
             [arr[i], arr[i + 1], arr[i + 2], arr[i + 3]] = temp;
         };
-        const __returned__ = { goGreen, mix, goTransparent, selectVal, selectEffect, cameras, effects, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, currentEffect, myVideoEl, playBtn, pauseBtn, shotBtn, canvas, screenshot, selfie, srcData, get cloned() { return cloned; }, set cloned(v) { cloned = v; }, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, changeEffect, render, doScreenshot, grabImageData, remakeImage, makeEffect, BatteryInfo: BatteryInfo_vue_1.default };
+        const saveSelfie = () => {
+            const image = canvas.value.toDataURL("image/png");
+            let link = document.createElement('a');
+            link.setAttribute("download", "Selfie.png");
+            link.setAttribute("href", image);
+            link.click();
+        };
+        const __returned__ = { goGreen, mix, goTransparent, selectVal, selectEffect, cameras, effects, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, currentEffect, myVideoEl, playBtn, pauseBtn, shotBtn, saveBtn, canvas, screenshot, selfie, srcData, get cloned() { return cloned; }, set cloned(v) { cloned = v; }, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, changeEffect, render, doScreenshot, grabImageData, remakeImage, makeEffect, saveSelfie, BatteryInfo: BatteryInfo_vue_1.default };
         Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true });
         return __returned__;
     }
@@ -20330,12 +20339,12 @@ const _hoisted_11 = (0, vue_1.createElementVNode)("option", {
 const _hoisted_12 = ["value"];
 const _hoisted_13 = {
     class: "screenshot-image original d-none",
-    alt: "",
+    alt: "original image",
     ref: "screenshot"
 };
 const _hoisted_14 = {
     class: "screenshot-image selfie d-none",
-    alt: "",
+    alt: "selfie image",
     ref: "selfie"
 };
 const _hoisted_15 = { class: "controls" };
@@ -20414,6 +20423,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 onClick: $setup.doScreenshot
             }, [
                 (0, vue_1.createVNode)(_component_vue_feather, { type: "image" })
+            ], 512),
+            (0, vue_1.createElementVNode)("button", {
+                class: "btn d-none",
+                title: "Save",
+                ref: "saveBtn",
+                onClick: $setup.saveSelfie
+            }, [
+                (0, vue_1.createVNode)(_component_vue_feather, { type: "save" })
             ], 512)
         ]),
         (0, vue_1.createVNode)($setup["BatteryInfo"])

@@ -84,7 +84,7 @@ video {
 .controlss > button:hover svg {
   color: white !important;
 }
-@media (min-width: 300px) and (max-width: 400px) {
+@media (min-width: 300px) and (max-width: 420px) {
 .controls {
     flex-direction: column;
 }
@@ -119,6 +119,15 @@ video {
 }
 .controls button:nth-child(3):hover {
   background-color: green;
+}
+.controls button:nth-child(4) {
+  border: 2px solid blue;
+}
+.controls button:nth-child(4) svg {
+  color: blue;
+}
+.controls button:nth-child(4):hover {
+  background-color: lightblue;
 }
 .controls > button {
   width: 2.8125rem;
