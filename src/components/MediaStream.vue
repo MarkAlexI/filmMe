@@ -49,18 +49,7 @@
   /// <reference types="webrtc" />
   import { ref, nextTick } from 'vue';
   import BatteryInfo from '@/BatteryInfo.vue';
-
-  const goGreen: mixFunction = (r, g, b, a) => {
-    return [r * .3, g * .59, b * .11, 255];
-  };
-  
-  const mix: mixFunction = (r, g, b, a) => {
-    return [g, b, r, 255];
-  };
-  
-  const goTransparent: mixFunction = (r, g, b, a) => {
-    return [r, g, b, 120];
-  };
+  import { goGreen, mix, goTransparent, negative, goGrey } from '../utils/effects';
 
   const selectVal: null = ref(null);
   const selectEffect = ref('none');
@@ -68,7 +57,9 @@
   const effects = ref([
     { name: 'lessOpacity', text: 'Less opacity', method: goTransparent },
     { name: 'goGreen', text: 'Make green photo', method: goGreen },
-    { name: 'mix', text: 'Mix this', method: mix }
+    { name: 'mix', text: 'Mix this', method: mix },
+    { name: 'negative', text: 'Make negative', method: negative },
+    { name: 'goGrey', text: 'Grayscale', method: goGrey }
   ]);
   let streamStarted = false;
   const myStreamSrc = ref(null);
@@ -87,24 +78,6 @@
 
   const srcData = ref(null);
   let cloned: Uint8ClampedArray | null = null;
-
-  interface mediaConstraints {
-    video: {
-      width: {
-        min: number,
-        ideal: number,
-        max: number,
-      },
-      height: {
-        min: number,
-        ideal: number,
-        max: number
-      },
-      deviceId ? : {
-        exact ? : string
-      }
-    }
-  };
 
   const constraints: mediaConstraints = {
     video: {
@@ -310,6 +283,15 @@
   .selfie {
     @extend %screenshot;
     left: 7rem;
+  }
+  
+  .custom-select {
+    font-weight: bold;
+  }
+  
+  option {
+    background-color: yellow;
+    color: red;
   }
 
   .controls {

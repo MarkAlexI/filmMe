@@ -20087,26 +20087,20 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vue_1 = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 const vue_2 = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 const BatteryInfo_vue_1 = __webpack_require__(/*! @/BatteryInfo.vue */ "./src/components/BatteryInfo.vue");
+const effects_1 = __webpack_require__(/*! ../utils/effects */ "./src/utils/effects.ts");
 exports["default"] = (0, vue_1.defineComponent)({
     __name: 'MediaStream',
     setup(__props, { expose }) {
         expose();
-        const goGreen = (r, g, b, a) => {
-            return [r * .3, g * .59, b * .11, 255];
-        };
-        const mix = (r, g, b, a) => {
-            return [g, b, r, 255];
-        };
-        const goTransparent = (r, g, b, a) => {
-            return [r, g, b, 120];
-        };
         const selectVal = (0, vue_2.ref)(null);
         const selectEffect = (0, vue_2.ref)('none');
         const cameras = (0, vue_2.ref)([{}]);
         const effects = (0, vue_2.ref)([
-            { name: 'lessOpacity', text: 'Less opacity', method: goTransparent },
-            { name: 'goGreen', text: 'Make green photo', method: goGreen },
-            { name: 'mix', text: 'Mix this', method: mix }
+            { name: 'lessOpacity', text: 'Less opacity', method: effects_1.goTransparent },
+            { name: 'goGreen', text: 'Make green photo', method: effects_1.goGreen },
+            { name: 'mix', text: 'Mix this', method: effects_1.mix },
+            { name: 'negative', text: 'Make negative', method: effects_1.negative },
+            { name: 'goGrey', text: 'Grayscale', method: effects_1.goGrey }
         ]);
         let streamStarted = false;
         const myStreamSrc = (0, vue_2.ref)(null);
@@ -20122,7 +20116,6 @@ exports["default"] = (0, vue_1.defineComponent)({
         const selfie = (0, vue_2.ref)(null);
         const srcData = (0, vue_2.ref)(null);
         let cloned = null;
-        ;
         const constraints = {
             video: {
                 width: {
@@ -20243,7 +20236,7 @@ exports["default"] = (0, vue_1.defineComponent)({
             link.setAttribute("href", image);
             link.click();
         };
-        const __returned__ = { goGreen, mix, goTransparent, selectVal, selectEffect, cameras, effects, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, currentEffect, myVideoEl, playBtn, pauseBtn, shotBtn, saveBtn, canvas, screenshot, selfie, srcData, get cloned() { return cloned; }, set cloned(v) { cloned = v; }, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, changeEffect, render, doScreenshot, grabImageData, remakeImage, makeEffect, saveSelfie, BatteryInfo: BatteryInfo_vue_1.default };
+        const __returned__ = { selectVal, selectEffect, cameras, effects, get streamStarted() { return streamStarted; }, set streamStarted(v) { streamStarted = v; }, myStreamSrc, cameraId, currentEffect, myVideoEl, playBtn, pauseBtn, shotBtn, saveBtn, canvas, screenshot, selfie, srcData, get cloned() { return cloned; }, set cloned(v) { cloned = v; }, constraints, getCameraSelection, playVideo, pauseVideo, startStream, handleStream, changeCamera, changeEffect, render, doScreenshot, grabImageData, remakeImage, makeEffect, saveSelfie, BatteryInfo: BatteryInfo_vue_1.default };
         Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true });
         return __returned__;
     }
@@ -20437,6 +20430,41 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     ]));
 }
 exports.render = render;
+
+
+/***/ }),
+
+/***/ "./src/utils/effects.ts":
+/*!******************************!*\
+  !*** ./src/utils/effects.ts ***!
+  \******************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.goGrey = exports.negative = exports.goTransparent = exports.mix = exports.goGreen = void 0;
+const goGreen = (r, g, b, a) => {
+    return [r * .3, g * .59, b * .11, 255];
+};
+exports.goGreen = goGreen;
+const mix = (r, g, b, a) => {
+    return [g, b, r, 255];
+};
+exports.mix = mix;
+const goTransparent = (r, g, b, a) => {
+    return [r, g, b, 120];
+};
+exports.goTransparent = goTransparent;
+const negative = (r, g, b, a) => {
+    return [255 - r, 255 - g, 255 - b, a];
+};
+exports.negative = negative;
+const goGrey = (r, g, b, a) => {
+    const avg = r * .3 + g * .59 + b * .11;
+    return [avg, avg, avg, 255];
+};
+exports.goGrey = goGrey;
 
 
 /***/ }),

@@ -67,6 +67,13 @@ video {
 .selfie {
   left: 7rem;
 }
+.custom-select {
+  font-weight: bold;
+}
+option {
+  background-color: yellow;
+  color: red;
+}
 .controls {
   position: absolute;
   right: 1rem;
