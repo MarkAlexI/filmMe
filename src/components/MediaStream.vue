@@ -49,7 +49,7 @@
   /// <reference types="webrtc" />
   import { ref, nextTick } from 'vue';
   import BatteryInfo from '@/BatteryInfo.vue';
-  import { goGreen, mix, goTransparent, negative, goGrey } from '../utils/effects';
+  import { goGreen, mix, goTransparent, negative, goGrey, noise } from '../utils/effects';
 
   const selectVal: null = ref(null);
   const selectEffect = ref('none');
@@ -59,7 +59,8 @@
     { name: 'goGreen', text: 'Make green photo', method: goGreen },
     { name: 'mix', text: 'Mix this', method: mix },
     { name: 'negative', text: 'Make negative', method: negative },
-    { name: 'goGrey', text: 'Grayscale', method: goGrey }
+    { name: 'goGrey', text: 'Grayscale', method: goGrey },
+    { name: 'noise', text: 'Add noise', method: noise }
   ]);
   let streamStarted = false;
   const myStreamSrc = ref(null);

@@ -19,4 +19,9 @@ const goGrey: mixFunction = (r, g, b, a) => {
   return [avg, avg, avg, 255];
 };
 
-export { goGreen, mix, goTransparent, negative, goGrey };
+const noise: mixFunction = (r, g, b, a) => {
+  const rand = (.5 - Math.random()) * 100;
+  return [r + rand, g + rand, b + rand, a];
+};
+
+export { goGreen, mix, goTransparent, negative, goGrey, noise };

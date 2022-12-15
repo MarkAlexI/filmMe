@@ -20100,7 +20100,8 @@ exports["default"] = (0, vue_1.defineComponent)({
             { name: 'goGreen', text: 'Make green photo', method: effects_1.goGreen },
             { name: 'mix', text: 'Mix this', method: effects_1.mix },
             { name: 'negative', text: 'Make negative', method: effects_1.negative },
-            { name: 'goGrey', text: 'Grayscale', method: effects_1.goGrey }
+            { name: 'goGrey', text: 'Grayscale', method: effects_1.goGrey },
+            { name: 'noise', text: 'Add noise', method: effects_1.noise }
         ]);
         let streamStarted = false;
         const myStreamSrc = (0, vue_2.ref)(null);
@@ -20443,7 +20444,7 @@ exports.render = render;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.goGrey = exports.negative = exports.goTransparent = exports.mix = exports.goGreen = void 0;
+exports.noise = exports.goGrey = exports.negative = exports.goTransparent = exports.mix = exports.goGreen = void 0;
 const goGreen = (r, g, b, a) => {
     return [r * .3, g * .59, b * .11, 255];
 };
@@ -20465,6 +20466,11 @@ const goGrey = (r, g, b, a) => {
     return [avg, avg, avg, 255];
 };
 exports.goGrey = goGrey;
+const noise = (r, g, b, a) => {
+    const rand = (.5 - Math.random()) * 100;
+    return [r + rand, g + rand, b + rand, a];
+};
+exports.noise = noise;
 
 
 /***/ }),
