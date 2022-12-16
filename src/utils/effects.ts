@@ -24,4 +24,9 @@ const noise: mixFunction = (r, g, b, a) => {
   return [r + rand, g + rand, b + rand, a];
 };
 
-export { goGreen, mix, goTransparent, negative, goGrey, noise };
+const sepia: mixFunction = (r, g, b, a) => {
+  const avg = .3 * r + .59 * g + .11 * b;
+  return [avg + 100, avg + 50, avg, 255];
+};
+
+export { goGreen, mix, goTransparent, negative, goGrey, noise, sepia };

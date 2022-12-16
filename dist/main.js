@@ -20101,7 +20101,8 @@ exports["default"] = (0, vue_1.defineComponent)({
             { name: 'mix', text: 'Mix this', method: effects_1.mix },
             { name: 'negative', text: 'Make negative', method: effects_1.negative },
             { name: 'goGrey', text: 'Grayscale', method: effects_1.goGrey },
-            { name: 'noise', text: 'Add noise', method: effects_1.noise }
+            { name: 'noise', text: 'Add noise', method: effects_1.noise },
+            { name: 'sepia', text: 'Old sepia', method: effects_1.sepia }
         ]);
         let streamStarted = false;
         const myStreamSrc = (0, vue_2.ref)(null);
@@ -20444,7 +20445,7 @@ exports.render = render;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.noise = exports.goGrey = exports.negative = exports.goTransparent = exports.mix = exports.goGreen = void 0;
+exports.sepia = exports.noise = exports.goGrey = exports.negative = exports.goTransparent = exports.mix = exports.goGreen = void 0;
 const goGreen = (r, g, b, a) => {
     return [r * .3, g * .59, b * .11, 255];
 };
@@ -20471,6 +20472,11 @@ const noise = (r, g, b, a) => {
     return [r + rand, g + rand, b + rand, a];
 };
 exports.noise = noise;
+const sepia = (r, g, b, a) => {
+    const avg = .3 * r + .59 * g + .11 * b;
+    return [avg + 100, avg + 50, avg, 255];
+};
+exports.sepia = sepia;
 
 
 /***/ }),
