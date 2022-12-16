@@ -20102,7 +20102,8 @@ exports["default"] = (0, vue_1.defineComponent)({
             { name: 'negative', text: 'Make negative', method: effects_1.negative },
             { name: 'goGrey', text: 'Grayscale', method: effects_1.goGrey },
             { name: 'noise', text: 'Add noise', method: effects_1.noise },
-            { name: 'sepia', text: 'Old sepia', method: effects_1.sepia }
+            { name: 'sepia', text: 'Old sepia', method: effects_1.sepia },
+            { name: 'blackAndWhite', text: 'Only black and white', method: effects_1.blackAndWhite }
         ]);
         let streamStarted = false;
         const myStreamSrc = (0, vue_2.ref)(null);
@@ -20445,7 +20446,7 @@ exports.render = render;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.sepia = exports.noise = exports.goGrey = exports.negative = exports.goTransparent = exports.mix = exports.goGreen = void 0;
+exports.blackAndWhite = exports.sepia = exports.noise = exports.goGrey = exports.negative = exports.goTransparent = exports.mix = exports.goGreen = void 0;
 const goGreen = (r, g, b, a) => {
     return [r * .3, g * .59, b * .11, 255];
 };
@@ -20477,6 +20478,11 @@ const sepia = (r, g, b, a) => {
     return [avg + 100, avg + 50, avg, 255];
 };
 exports.sepia = sepia;
+const blackAndWhite = (r, g, b, a) => {
+    const avg = .3 * r + .59 * g + .11 * b;
+    return avg > 127 ? [255, 255, 255, 255] : [0, 0, 0, 255];
+};
+exports.blackAndWhite = blackAndWhite;
 
 
 /***/ }),

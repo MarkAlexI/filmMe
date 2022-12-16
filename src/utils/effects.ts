@@ -29,4 +29,9 @@ const sepia: mixFunction = (r, g, b, a) => {
   return [avg + 100, avg + 50, avg, 255];
 };
 
-export { goGreen, mix, goTransparent, negative, goGrey, noise, sepia };
+const blackAndWhite: mixFunction = (r, g, b, a) => {
+  const avg = .3 * r + .59 * g + .11 * b;
+  return avg > 127 ? [255, 255, 255, 255] : [0, 0, 0, 255];
+};
+
+export { goGreen, mix, goTransparent, negative, goGrey, noise, sepia, blackAndWhite };
