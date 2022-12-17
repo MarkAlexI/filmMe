@@ -74,4 +74,11 @@ const plusSat: mixFunction = (r, g, b, a) => {
   return pix;
 }
 
-export { goGreen, mix, goTransparent, negative, goGrey, noise, sepia, blackAndWhite, plusSat };
+const plusHue: mixFunction = (r, g, b, a) => {
+  let pix = rgb2hsla(r, g, b, a);
+  pix.h += 50;
+  pix = hsl2rgb(pix);
+  return pix;
+};
+
+export { goGreen, mix, goTransparent, negative, goGrey, noise, sepia, blackAndWhite, plusSat, plusHue };

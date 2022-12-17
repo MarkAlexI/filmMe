@@ -20104,7 +20104,8 @@ exports["default"] = (0, vue_1.defineComponent)({
             { name: 'noise', text: 'Add noise', method: effects_1.noise },
             { name: 'sepia', text: 'Old sepia', method: effects_1.sepia },
             { name: 'blackAndWhite', text: 'Only black and white', method: effects_1.blackAndWhite },
-            { name: 'plusSaturation', text: 'More saturation', method: effects_1.plusSat }
+            { name: 'plusSaturation', text: 'More saturation', method: effects_1.plusSat },
+            { name: 'plusHue', text: 'More hue', method: effects_1.plusHue }
         ]);
         let streamStarted = false;
         const myStreamSrc = (0, vue_2.ref)(null);
@@ -20447,7 +20448,7 @@ exports.render = render;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.plusSat = exports.blackAndWhite = exports.sepia = exports.noise = exports.goGrey = exports.negative = exports.goTransparent = exports.mix = exports.goGreen = void 0;
+exports.plusHue = exports.plusSat = exports.blackAndWhite = exports.sepia = exports.noise = exports.goGrey = exports.negative = exports.goTransparent = exports.mix = exports.goGreen = void 0;
 const goGreen = (r, g, b, a) => {
     return [r * .3, g * .59, b * .11, 255];
 };
@@ -20520,6 +20521,13 @@ const plusSat = (r, g, b, a) => {
     return pix;
 };
 exports.plusSat = plusSat;
+const plusHue = (r, g, b, a) => {
+    let pix = rgb2hsla(r, g, b, a);
+    pix.h += 50;
+    pix = hsl2rgb(pix);
+    return pix;
+};
+exports.plusHue = plusHue;
 
 
 /***/ }),
