@@ -1,5 +1,12 @@
 type mixFunction = (r: number, g: number, b: number, a: number) => number[];
 
+type hsla = {
+  h: number,
+  s: number,
+  l: number,
+  alpha: number
+};
+
 type BatteryManager = {
   charging: boolean,
   chargingTime: number,

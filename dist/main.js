@@ -20103,7 +20103,8 @@ exports["default"] = (0, vue_1.defineComponent)({
             { name: 'goGrey', text: 'Grayscale', method: effects_1.goGrey },
             { name: 'noise', text: 'Add noise', method: effects_1.noise },
             { name: 'sepia', text: 'Old sepia', method: effects_1.sepia },
-            { name: 'blackAndWhite', text: 'Only black and white', method: effects_1.blackAndWhite }
+            { name: 'blackAndWhite', text: 'Only black and white', method: effects_1.blackAndWhite },
+            { name: 'plusSaturation', text: 'More saturation', method: effects_1.plusSat }
         ]);
         let streamStarted = false;
         const myStreamSrc = (0, vue_2.ref)(null);
@@ -20446,7 +20447,7 @@ exports.render = render;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.blackAndWhite = exports.sepia = exports.noise = exports.goGrey = exports.negative = exports.goTransparent = exports.mix = exports.goGreen = void 0;
+exports.plusSat = exports.blackAndWhite = exports.sepia = exports.noise = exports.goGrey = exports.negative = exports.goTransparent = exports.mix = exports.goGreen = void 0;
 const goGreen = (r, g, b, a) => {
     return [r * .3, g * .59, b * .11, 255];
 };
@@ -20465,7 +20466,7 @@ const negative = (r, g, b, a) => {
 exports.negative = negative;
 const goGrey = (r, g, b, a) => {
     const avg = r * .3 + g * .59 + b * .11;
-    return [avg, avg, avg, 255];
+    return [avg, avg, avg, a];
 };
 exports.goGrey = goGrey;
 const noise = (r, g, b, a) => {
@@ -20475,14 +20476,50 @@ const noise = (r, g, b, a) => {
 exports.noise = noise;
 const sepia = (r, g, b, a) => {
     const avg = .3 * r + .59 * g + .11 * b;
-    return [avg + 100, avg + 50, avg, 255];
+    return [avg + 100, avg + 50, avg, a];
 };
 exports.sepia = sepia;
 const blackAndWhite = (r, g, b, a) => {
     const avg = .3 * r + .59 * g + .11 * b;
-    return avg > 127 ? [255, 255, 255, 255] : [0, 0, 0, 255];
+    return avg > 127 ? [255, 255, 255, a] : [0, 0, 0, a];
 };
 exports.blackAndWhite = blackAndWhite;
+const hsl2rgb = ({ h, s, l, alpha }) => {
+    let a = s * Math.min(l, 1 - l);
+    let f = (n, k = (n + h / 30) % 12) => l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255), alpha];
+};
+const rgb2hsla = (r, g, b, a = 255) => {
+    r /= 255, g /= 255, b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+    if (max == min) {
+        h = s = 0;
+    }
+    else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+            case r:
+                h = (g - b) / d + (g < b ? 6 : 0);
+                break;
+            case g:
+                h = (b - r) / d + 2;
+                break;
+            case b:
+                h = (r - g) / d + 4;
+                break;
+        }
+    }
+    return { h: h * 60, s: s, l: l, alpha: a };
+};
+const plusSat = (r, g, b, a) => {
+    let pix = rgb2hsla(r, g, b, a);
+    pix.s += 2;
+    pix = hsl2rgb(pix);
+    return pix;
+};
+exports.plusSat = plusSat;
 
 
 /***/ }),
