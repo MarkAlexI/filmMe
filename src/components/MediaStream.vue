@@ -49,7 +49,7 @@
   /// <reference types="webrtc" />
   import { ref, nextTick } from 'vue';
   import BatteryInfo from '@/BatteryInfo.vue';
-  import { goGreen, mix, goTransparent, negative, goGrey, noise, sepia, blackAndWhite, plusSat, plusHue } from '../utils/effects';
+  import { goGreen, mix, goTransparent, negative, goGrey, noise, sepia, blackAndWhite, plusSat, plusHue, plusLight } from '../utils/effects';
 
   const selectVal: null = ref(null);
   const selectEffect = ref('none');
@@ -64,7 +64,8 @@
     { name: 'sepia', text: 'Old sepia', method: sepia },
     { name: 'blackAndWhite', text: 'Only black and white', method: blackAndWhite },
     { name: 'plusSaturation', text: 'More saturation', method: plusSat },
-    { name: 'plusHue', text: 'More hue', method: plusHue }
+    { name: 'plusHue', text: 'More hue', method: plusHue },
+    { name: 'plusLightning', text: 'More lightning', method: plusLight }
   ]);
   let streamStarted = false;
   const myStreamSrc = ref(null);
@@ -87,14 +88,10 @@
   const constraints: mediaConstraints = {
     video: {
       width: {
-        min: 1280,
-        ideal: 1920,
-        max: 2560,
+        ideal: 1920
       },
       height: {
-        min: 720,
-        ideal: 1080,
-        max: 1440
+        ideal: 1080
       },
     }
   };

@@ -25,17 +25,17 @@ interface Navigator extends Navigator {
 interface mediaConstraints {
   video: {
     width: {
-      min: number,
+      min?: number,
       ideal: number,
-      max: number,
+      max?: number,
     },
     height: {
-      min: number,
+      min?: number,
       ideal: number,
-      max: number
+      max?: number
     },
-    deviceId ? : {
-      exact ? : string
+    deviceId?: {
+      exact?: string
     }
   }
 };

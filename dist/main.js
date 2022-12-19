@@ -20105,7 +20105,8 @@ exports["default"] = (0, vue_1.defineComponent)({
             { name: 'sepia', text: 'Old sepia', method: effects_1.sepia },
             { name: 'blackAndWhite', text: 'Only black and white', method: effects_1.blackAndWhite },
             { name: 'plusSaturation', text: 'More saturation', method: effects_1.plusSat },
-            { name: 'plusHue', text: 'More hue', method: effects_1.plusHue }
+            { name: 'plusHue', text: 'More hue', method: effects_1.plusHue },
+            { name: 'plusLightning', text: 'More lightning', method: effects_1.plusLight }
         ]);
         let streamStarted = false;
         const myStreamSrc = (0, vue_2.ref)(null);
@@ -20124,14 +20125,10 @@ exports["default"] = (0, vue_1.defineComponent)({
         const constraints = {
             video: {
                 width: {
-                    min: 1280,
-                    ideal: 1920,
-                    max: 2560,
+                    ideal: 1920
                 },
                 height: {
-                    min: 720,
-                    ideal: 1080,
-                    max: 1440
+                    ideal: 1080
                 },
             }
         };
@@ -20448,7 +20445,7 @@ exports.render = render;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.plusHue = exports.plusSat = exports.blackAndWhite = exports.sepia = exports.noise = exports.goGrey = exports.negative = exports.goTransparent = exports.mix = exports.goGreen = void 0;
+exports.plusLight = exports.plusHue = exports.plusSat = exports.blackAndWhite = exports.sepia = exports.noise = exports.goGrey = exports.negative = exports.goTransparent = exports.mix = exports.goGreen = void 0;
 const goGreen = (r, g, b, a) => {
     return [r * .3, g * .59, b * .11, 255];
 };
@@ -20485,9 +20482,9 @@ const blackAndWhite = (r, g, b, a) => {
     return avg > 127 ? [255, 255, 255, a] : [0, 0, 0, a];
 };
 exports.blackAndWhite = blackAndWhite;
-const hsl2rgb = ({ h, s, l, alpha }) => {
-    let a = s * Math.min(l, 1 - l);
-    let f = (n, k = (n + h / 30) % 12) => l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+const hsla2rgb = ({ h, s, l, alpha }) => {
+    const a = s * Math.min(l, 1 - l);
+    const f = (n, k = (n + h / 30) % 12) => l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
     return [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255), alpha];
 };
 const rgb2hsla = (r, g, b, a = 255) => {
@@ -20514,20 +20511,23 @@ const rgb2hsla = (r, g, b, a = 255) => {
     }
     return { h: h * 60, s: s, l: l, alpha: a };
 };
+const correctHsla = (r, g, b, a, coord, direction, value) => {
+    const pixel = rgb2hsla(r, g, b, a);
+    pixel[coord] = pixel[coord] + (direction === 'up' ? 1 : -1) * value;
+    return hsla2rgb(pixel);
+};
 const plusSat = (r, g, b, a) => {
-    let pix = rgb2hsla(r, g, b, a);
-    pix.s += 2;
-    pix = hsl2rgb(pix);
-    return pix;
+    return correctHsla(r, g, b, a, 's', 'up', 2);
 };
 exports.plusSat = plusSat;
 const plusHue = (r, g, b, a) => {
-    let pix = rgb2hsla(r, g, b, a);
-    pix.h += 50;
-    pix = hsl2rgb(pix);
-    return pix;
+    return correctHsla(r, g, b, a, 'h', 'up', 50);
 };
 exports.plusHue = plusHue;
+const plusLight = (r, g, b, a) => {
+    return correctHsla(r, g, b, a, 'l', 'up', .2);
+};
+exports.plusLight = plusLight;
 
 
 /***/ }),
