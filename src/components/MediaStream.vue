@@ -268,7 +268,7 @@
 
   %screenshot {
     width: 5.625rem;
-    height: 9.375rem;
+    object-fit: contain;
     border-radius: 4px;
     border: 2px solid whitesmoke;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);

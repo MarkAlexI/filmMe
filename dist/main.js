@@ -21022,7 +21022,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function render(_ctx, _cache) {
-  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h1", null, "Choose camera. Work with record."))
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h1", null, "Choose a camera. Work with record."))
 }
 
 /***/ }),

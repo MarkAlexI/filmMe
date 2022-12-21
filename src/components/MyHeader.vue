@@ -1,5 +1,5 @@
 <template>
-  <h1>Choose camera. Work with record.</h1>
+  <h1>Choose a camera. Work with record.</h1>
 </template>
 
 <script setup lang="ts">
@@ -8,9 +8,9 @@
 
 <style lang="scss">
   h1 {
-    font-size: 28px;
+    font-size: 1.75rem;
     color: rebeccapurple;
-    margin-bottom: 30px;
+    margin-bottom: 1.875rem;
     text-align: center;
   }
 </style>
