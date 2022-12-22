@@ -17,10 +17,22 @@
       const batteryManager = await navigator.getBattery();
       const level = batteryManager.level;
       const charging = batteryManager.charging;
-      if (charging) batteryState.value = 'battery-charging';
-      batteryLevel.value.textContent = `${Math.round(level * 10000)/100}%`;
+      
+      const updateChargeInfo = () => {
+        batteryState.value = batteryManager.charging ?
+          'battery-charging' :
+          'battery';
+      };
+      
+      const updateLevelInfo = () => {
+        batteryLevel.value.textContent = `${Math.round(batteryManager.level * 10000)/100}%`;
+      };
+      updateLevelInfo();
+      
+      batteryManager.addEventListener('chargingchange', updateChargeInfo);
+      batteryManager.addEventListener('levelchange', updateLevelInfo);
     };
-
+    
     getBatteryLevel();
   }
 </script>
