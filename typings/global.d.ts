@@ -7,35 +7,46 @@ type hsla = {
   alpha: number
 };
 
-type BatteryManager = {
-  charging: boolean,
-  chargingTime: number,
-  dischargingTime: number,
-  level: number,
-  onchargingchange: Event | null,
-  onchargingtimechange: Event | null,
-  ondischargingtimechange: Event | null,
-  onlevelchange: Event | null
-};
-
 interface Navigator extends Navigator {
   getBattery ? : () => Promise < BatteryManager > ;
 };
 
+interface BatteryManager extends BatteryManagerEventTarget {
+  readonly charging: boolean;
+  readonly chargingTime: number;
+  readonly dischargingTime: number;
+  readonly level: number;
+}
+
+interface BatteryManagerEventTargetEventMap {
+  chargingchange: Event;
+  chargingtimechange: Event;
+  dischargingtimechange: Event;
+  levelchange: Event;
+}
+
+interface BatteryManagerEventTarget extends EventTarget {
+  onchargingchange: (this: BatteryManager, ev: Event) => any;
+  onlevelchange: (this: BatteryManager, ev: Event) => any;
+  onchargingtimechange: (this: BatteryManager, ev: Event) => any;
+  ondischargingtimechange: (this: BatteryManager, ev: Event) => any;
+  addEventListener < K extends keyof BatteryManagerEventTargetEventMap > (type: K, listener: (this: BatteryManager, ev: BatteryManagerEventTargetEventMap[K]) => any, useCapture ? : boolean): void;
+}
+
 interface mediaConstraints {
   video: {
     width: {
-      min?: number,
+      min ? : number,
       ideal: number,
-      max?: number,
+      max ? : number,
     },
     height: {
-      min?: number,
+      min ? : number,
       ideal: number,
-      max?: number
+      max ? : number
     },
-    deviceId?: {
-      exact?: string
+    deviceId ? : {
+      exact ? : string
     }
   }
 };
