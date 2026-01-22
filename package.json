@@ -27,7 +27,7 @@
   "homepage": "https://github.com/MarkAlexI/filmMe#readme",
   "private": true,
   "dependencies": {
-    "@types/node": "^18.11.9",
+    "@types/node": "^18.19.130",
     "vue": "^3.2.45",
     "feather-icons": "4.29.2",
     "vue-feather": "2.0.0"
